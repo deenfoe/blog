@@ -1,4 +1,3 @@
-/* eslint-disable */
 import styles from './Header.module.scss'
 import img from '../../assets/images/Logo.svg'
 

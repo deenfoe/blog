@@ -1,4 +1,3 @@
-/* eslint-disable */
 import TicketSort from '../TicketSort/TicketSort'
 import TicketList from '../TicketList/TicketList'
 import ShowMoreTickets from '../ShowMoreTickets/ShowMoreTickets'

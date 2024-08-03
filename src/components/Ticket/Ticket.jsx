@@ -1,4 +1,3 @@
-/* eslint-disable */
 import img from '../../assets/images/S7 Logo.svg'
 
 import styles from './Ticket.module.scss'
