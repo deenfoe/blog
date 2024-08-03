@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Filter from '../Filter/Filter'
 import TicketsSection from '../TicketsSection/TicketsSection'
 

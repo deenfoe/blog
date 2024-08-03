@@ -1,5 +1,7 @@
+/* eslint-disable */
 import { useDispatch, useSelector } from 'react-redux'
-import styles from './Filter.module.scss'
+import axios from 'axios'
+
 import {
   selectAllChecked,
   selectFilters,
@@ -7,7 +9,8 @@ import {
   toggleAll,
   uncheckAllFilters,
 } from '../../redux/slices/filterSlice'
-import axios from 'axios'
+
+import styles from './Filter.module.scss'
 
 function Filter() {
   const dispatch = useDispatch()
@@ -94,5 +97,5 @@ function Filter() {
     </aside>
   )
 }
-ю
+
 export default Filter

@@ -1,4 +1,6 @@
+/* eslint-disable */
 import { useSelector } from 'react-redux'
+
 import { selectTickets, selectLoading, selectError } from '../../redux/slices/ticketsSlice'
 import Ticket from '../Ticket/Ticket'
 

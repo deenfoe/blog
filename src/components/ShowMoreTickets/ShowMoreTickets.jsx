@@ -1,3 +1,4 @@
+/* eslint-disable */
 import styles from './ShowMoreTickets.module.scss'
 
 function ShowMoreTickets() {

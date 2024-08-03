@@ -27,7 +27,7 @@ export const fetchTickets = createAsyncThunk('tickets/fetchTickets', async (sear
 
 const ticketsSlice = createSlice({
   name: 'tickets',
-  initialState: initialState,
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
