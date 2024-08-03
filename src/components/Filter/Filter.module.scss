@@ -1,0 +1,72 @@
+.aside {
+  display: flex;
+  flex-basis: 31%;
+  align-self: flex-start;
+  flex-direction: column;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filterDesc {
+  display: flex;
+  justify-content: flex-start;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 0 0 10px 20px;
+}
+
+.filterLabelWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.filterLabel {
+  display: flex;
+  align-items: center;
+  padding: 10px 0px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f1fcff;
+  }
+}
+
+.filterText {
+  padding-left: 10px;
+}
+
+.filterInput {
+  margin-left: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 760px) {
+  .aside {
+    align-self: normal;
+    flex-basis: 5%;
+  }
+  .filterLabel {
+    display: flex;
+    flex-direction: row;
+  }
+  .filterDesc {
+    justify-content: center;
+  }
+  .filterLabelWrap {
+    display: flex;
+    flex-direction: column;
+  }
+  .filterLabels {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    gap: 10px;
+  }
+  .filterInput {
+    margin: 0;
+  }
+}

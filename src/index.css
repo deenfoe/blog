@@ -1,0 +1,38 @@
+@import-normalize;
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('./assets/fonts/OpenSans-Regular.eot');
+  src:
+    local('Open Sans Regular'),
+    local('OpenSans-Regular'),
+    url('./assets/fonts/OpenSans-Regular.eot') format('embedded-opentype'),
+    url('./assets/fonts/OpenSans-Regular.woff') format('woff'),
+    url('./assets/fonts/OpenSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src:
+    local('Open Sans Semi Bold'),
+    local('Open-Sans-Semi-Bold'),
+    url('./assets/fonts/OpenSans-SemiBold.woff2') format('woff2'),
+    url('./assets/fonts/OpenSans-SemiBold.woff') format('woff'),
+    url('./assets/fonts/OpenSans-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+html {
+  font-size: 13px;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f3f7fa;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}

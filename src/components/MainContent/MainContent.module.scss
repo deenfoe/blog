@@ -1,0 +1,11 @@
+.main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  background-color: #f3f7fa;
+
+  @media (max-width: 760px) {
+    flex-direction: column;
+  }
+}
