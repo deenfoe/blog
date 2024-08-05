@@ -1,47 +1,34 @@
-import img from '../../assets/images/S7 Logo.svg'
-
+import { formatDuration, formatStops, formatStopsList, formatFlightTimes, formatRoute } from '../../utils/formatters'
 import styles from './Ticket.module.scss'
+import AirlineLogo from './AirlineLogo'
 
-function Ticket() {
+function Ticket({ ticket }) {
   return (
     <li className={styles.ticket}>
       <div className={styles.ticketPriceCompany}>
-        <span className={styles.ticketPrice}>13 400 P</span>
-        <img src={img} alt="logo" />
+        <span className={styles.ticketPrice}>{ticket.price.toLocaleString('ru-RU')} ₽</span>
+        <AirlineLogo company={ticket.carrier} />
       </div>
-      <div className={styles.ticketTransfers}>
-        <div className={styles.ticketTransfer}>
-          <div className={styles.ticketTransferInfo}>
-            <span className={styles.ticketTransferTitle}>MOW - HKT</span>
-            <span className={styles.ticketTransferDesc}>10:45 - 08:00</span>
-          </div>
-          <div className={styles.ticketTransferInfo}>
-            <span className={styles.ticketTransferTitle}>В ПУТИ</span>
-            <span className={styles.ticketTransferDesc}>21ч 15м</span>
-          </div>
-          <div className={styles.ticketTransferInfo}>
-            <span className={styles.ticketTransferTitle}>2 ПЕРЕСАДКИ</span>
-            <span className={styles.ticketTransferDesc}>HKG, JNB</span>
+      {ticket.segments.map((segment, index) => (
+        <div key={index} className={styles.ticketTransfers}>
+          <div className={styles.ticketTransfer}>
+            <div className={styles.ticketTransferInfo}>
+              <span className={styles.ticketTransferTitle}>{formatRoute(segment.origin, segment.destination)}</span>
+              <span className={styles.ticketTransferDesc}>{formatFlightTimes(segment.date, segment.duration)}</span>
+            </div>
+            <div className={styles.ticketTransferInfo}>
+              <span className={styles.ticketTransferTitle}>В ПУТИ</span>
+              <span className={styles.ticketTransferDesc}>{formatDuration(segment.duration)}</span>
+            </div>
+            <div className={styles.ticketTransferInfo}>
+              <span className={styles.ticketTransferTitle}>{formatStops(segment.stops)}</span>
+              <span className={styles.ticketTransferDesc}>{formatStopsList(segment.stops)}</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div className={styles.ticketTransfers}>
-        <div className={styles.ticketTransfer}>
-          <div className={styles.ticketTransferInfo}>
-            <span className={styles.ticketTransferTitle}>MOW - HKT</span>
-            <span className={styles.ticketTransferDesc}>10:45 - 08:00</span>
-          </div>
-          <div className={styles.ticketTransferInfo}>
-            <span className={styles.ticketTransferTitle}>В ПУТИ</span>
-            <span className={styles.ticketTransferDesc}>21ч 15м</span>
-          </div>
-          <div className={styles.ticketTransferInfo}>
-            <span className={styles.ticketTransferTitle}>2 ПЕРЕСАДКИ</span>
-            <span className={styles.ticketTransferDesc}>HKG, JNB</span>
-          </div>
-        </div>
-      </div>
+      ))}
     </li>
   )
 }
+
 export default Ticket

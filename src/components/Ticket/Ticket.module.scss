@@ -31,7 +31,7 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
-  padding-right: 50px;
+  padding-right: 30px;
 }
 .ticketTransfer {
   display: flex;
@@ -41,6 +41,7 @@
 .ticketTransferInfo {
   display: flex;
   flex-direction: column;
+  min-width: 100px;
 }
 
 .ticketTransferTitle {

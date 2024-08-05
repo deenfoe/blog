@@ -1,26 +1,51 @@
-import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { selectTickets, selectLoading, selectError } from '../../redux/slices/ticketsSlice'
+import {
+  selectTickets,
+  selectLoading,
+  selectError,
+  selectStop,
+  selectSearchId,
+  selectDisplayedTicketsCount,
+  fetchSearchId,
+  fetchTickets,
+  showMoreTickets,
+} from '../../redux/slices/ticketsSlice'
 import Ticket from '../Ticket/Ticket'
 
 import styles from './TicketList.module.scss'
 
 function TicketList() {
+  const dispatch = useDispatch()
   const tickets = useSelector(selectTickets)
+  const displayedTicketesCount = useSelector(selectDisplayedTicketsCount)
   const loading = useSelector(selectLoading)
   const error = useSelector(selectError)
+  const stop = useSelector(selectStop)
+  const searchId = useSelector(selectSearchId)
 
-  if (loading) {
-    return <div>Loading...</div>
-  }
+  // Запуск получения searchId при первом рендере компонента
+  useEffect(() => {
+    dispatch(fetchSearchId())
+  }, [dispatch])
 
-  if (error) {
-    return <div>Error: {error}</div>
-  }
+  // Запуск получения билетов при наличии searchId
+  useEffect(() => {
+    if (searchId && !stop) {
+      const interval = setInterval(() => {
+        dispatch(fetchTickets(searchId))
+      }, 1000)
+      return () => clearInterval(interval)
+    }
+  }, [dispatch, searchId, stop])
+
+  // Обновление отображаемых билетов при изменении массива tickets
+  const displayedTickets = tickets.slice(0, displayedTicketesCount)
 
   return (
     <ul className={styles.ticketList}>
-      {tickets.map((ticket, index) => (
+      {displayedTickets.map((ticket, index) => (
         <Ticket key={index} ticket={ticket} />
       ))}
     </ul>
