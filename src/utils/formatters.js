@@ -21,7 +21,7 @@ export function formatFlightTimes(departureTime, duration) {
 
 // Функция для форматирования количества пересадок
 export function formatStops(stops) {
-  const stopCount = stop.length
+  const stopCount = stops.length
   if (stopCount === 0) return 'БЕЗ ПЕРЕСАДОК'
   if (stopCount === 1) return '1 ПЕРЕСАДКА'
   return `${stopCount} ПЕРЕСАДКИ`

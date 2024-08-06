@@ -1,4 +1,5 @@
 import { formatDuration, formatStops, formatStopsList, formatFlightTimes, formatRoute } from '../../utils/formatters'
+import { v4 as uuidv4 } from 'uuid'
 import styles from './Ticket.module.scss'
 import AirlineLogo from './AirlineLogo'
 
@@ -10,7 +11,7 @@ function Ticket({ ticket }) {
         <AirlineLogo company={ticket.carrier} />
       </div>
       {ticket.segments.map((segment, index) => (
-        <div key={index} className={styles.ticketTransfers}>
+        <div key={uuidv4()} className={styles.ticketTransfers}>
           <div className={styles.ticketTransfer}>
             <div className={styles.ticketTransferInfo}>
               <span className={styles.ticketTransferTitle}>{formatRoute(segment.origin, segment.destination)}</span>

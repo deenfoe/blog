@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   selectTickets,
@@ -46,7 +47,7 @@ function TicketList() {
   return (
     <ul className={styles.ticketList}>
       {displayedTickets.map((ticket, index) => (
-        <Ticket key={index} ticket={ticket} />
+        <Ticket key={uuidv4()} ticket={ticket} />
       ))}
     </ul>
   )
