@@ -13,14 +13,17 @@ import {
   fetchTickets,
   showMoreTickets,
 } from '../../redux/slices/ticketsSlice'
-import Ticket from '../Ticket/Ticket'
+import { selectFilters } from '../../redux/slices/filterSlice'
 
+import Ticket from '../Ticket/Ticket'
+import filterTickets from '../../utils/filterTickets'
 import styles from './TicketList.module.scss'
 
 function TicketList() {
   const dispatch = useDispatch()
   const tickets = useSelector(selectTickets)
   const displayedTicketesCount = useSelector(selectDisplayedTicketsCount)
+  const filters = useSelector(selectFilters)
   const loading = useSelector(selectLoading)
   const error = useSelector(selectError)
   const stop = useSelector(selectStop)
@@ -41,12 +44,13 @@ function TicketList() {
     }
   }, [dispatch, searchId, stop])
 
-  // Обновление отображаемых билетов при изменении массива tickets
-  const displayedTickets = tickets.slice(0, displayedTicketesCount)
+  const filteredTickets = filterTickets(tickets, filters)
+ // Обновление отображаемых билетов при изменении массива tickets
+  const displayedTickets = filteredTickets.slice(0, displayedTicketesCount)
 
   return (
     <ul className={styles.ticketList}>
-      {displayedTickets.map((ticket, index) => (
+      {displayedTickets.map((ticket) => (
         <Ticket key={uuidv4()} ticket={ticket} />
       ))}
     </ul>
