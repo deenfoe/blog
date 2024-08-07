@@ -1,4 +1,4 @@
-function filterTickets(data, filters) {
+function filterTickets(data, filters, activeButton) {
   const totalStops = [] // ["oneStop", "threeStops"]
 
   //Берем из объекта ключи которые true
@@ -30,6 +30,28 @@ function filterTickets(data, filters) {
       return totalStops.includes(stopsCount)
     })
   })
+  const test = activeButton.find((element) => element.status).label
+  switch (test) {
+    case 'САМЫЙ ДЕШЕВЫЙ':
+      filteredTickets.sort((a, b) => a.price - b.price)
+      break
+    case 'САМЫЙ БЫСТРЫЙ':
+      filteredTickets.sort((a, b) => {
+        const totalTimeA = a.segments.reduce((acc, el) => acc + el.duration, 0)
+        const totalTimeB = b.segments.reduce((acc, el) => acc + el.duration, 0)
+        return totalTimeA - totalTimeB
+      })
+      break
+    case 'ОПТИМАЛЬНЫЙ':
+      filteredTickets.sort((a, b) => {
+        const totalPriceAndTimeA = a.price + a.segments.reduce((acc, el) => acc + el.duration, 0)
+        const totalPriceAndTimeB = b.price + b.segments.reduce((acc, el) => acc + el.duration, 0)
+        return totalPriceAndTimeA - totalPriceAndTimeB
+      })
+      break
+    default:
+      return filteredTickets
+  }
   return filteredTickets
 }
 

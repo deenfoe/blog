@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  // allChecked: false,
   filters: {
     allChecked: true,
     noStops: true,

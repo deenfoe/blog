@@ -1,34 +1,28 @@
-import React, { useState } from 'react'
-
+import { selectButtons, setActiveButton } from '../../redux/slices/ticketSortSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import styles from './TicketSort.module.scss'
 
 function TicketSort() {
-  const [activeButton, setActiveButton] = useState('САМЫЙ ДЕШЕВЫЙ')
+  const dispatch = useDispatch()
+  const sortedButtons = useSelector(selectButtons)
 
-  const handleButtonClick = (buttonName) => {
-    setActiveButton(buttonName)
+  function onActiveButton(button) {
+    dispatch(setActiveButton(button))
   }
 
   return (
     <div className={styles.ticketSort}>
-      <button
-        className={`${styles.ticketSortBtn} ${activeButton === 'САМЫЙ ДЕШЕВЫЙ' ? styles.active : ''}`}
-        onClick={() => handleButtonClick('САМЫЙ ДЕШЕВЫЙ')}
-      >
-        САМЫЙ ДЕШЕВЫЙ
-      </button>
-      <button
-        className={`${styles.ticketSortBtn} ${activeButton === 'САМЫЙ БЫСТРЫЙ' ? styles.active : ''}`}
-        onClick={() => handleButtonClick('САМЫЙ БЫСТРЫЙ')}
-      >
-        САМЫЙ БЫСТРЫЙ
-      </button>
-      <button
-        className={`${styles.ticketSortBtn} ${activeButton === 'ОПТИМАЛЬНЫЙ' ? styles.active : ''}`}
-        onClick={() => handleButtonClick('ОПТИМАЛЬНЫЙ')}
-      >
-        ОПТИМАЛЬНЫЙ
-      </button>
+      {sortedButtons.map((button) => {
+        return (
+          <button
+            key={button.id}
+            className={`${styles.ticketSortBtn} ${button.status ? styles.active : ''}`}
+            onClick={() => onActiveButton(button.label)}
+          >
+            {button.label}
+          </button>
+        )
+      })}
     </div>
   )
 }

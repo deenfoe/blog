@@ -18,6 +18,7 @@ import { selectFilters } from '../../redux/slices/filterSlice'
 import Ticket from '../Ticket/Ticket'
 import filterTickets from '../../utils/filterTickets'
 import styles from './TicketList.module.scss'
+import { selectButtons } from '../../redux/slices/ticketSortSlice'
 
 function TicketList() {
   const dispatch = useDispatch()
@@ -28,6 +29,8 @@ function TicketList() {
   const error = useSelector(selectError)
   const stop = useSelector(selectStop)
   const searchId = useSelector(selectSearchId)
+
+  const activeButton = useSelector(selectButtons)
 
   // Запуск получения searchId при первом рендере компонента
   useEffect(() => {
@@ -44,8 +47,8 @@ function TicketList() {
     }
   }, [dispatch, searchId, stop])
 
-  const filteredTickets = filterTickets(tickets, filters)
- // Обновление отображаемых билетов при изменении массива tickets
+  const filteredTickets = filterTickets(tickets, filters, activeButton)
+  // Обновление отображаемых билетов при изменении массива tickets
   const displayedTickets = filteredTickets.slice(0, displayedTicketesCount)
 
   return (
