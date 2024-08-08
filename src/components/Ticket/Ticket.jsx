@@ -1,5 +1,8 @@
-import { formatDuration, formatStops, formatStopsList, formatFlightTimes, formatRoute } from '../../utils/formatters'
 import { v4 as uuidv4 } from 'uuid'
+import PropTypes from 'prop-types'
+
+import { formatDuration, formatStops, formatStopsList, formatFlightTimes, formatRoute } from '../../utils/formatters'
+
 import styles from './Ticket.module.scss'
 import AirlineLogo from './AirlineLogo'
 
@@ -10,7 +13,7 @@ function Ticket({ ticket }) {
         <span className={styles.ticketPrice}>{ticket.price.toLocaleString('ru-RU')} ₽</span>
         <AirlineLogo company={ticket.carrier} />
       </div>
-      {ticket.segments.map((segment, index) => (
+      {ticket.segments.map((segment) => (
         <div key={uuidv4()} className={styles.ticketTransfers}>
           <div className={styles.ticketTransfer}>
             <div className={styles.ticketTransferInfo}>
@@ -30,6 +33,22 @@ function Ticket({ ticket }) {
       ))}
     </li>
   )
+}
+
+Ticket.propTypes = {
+  ticket: PropTypes.shape({
+    price: PropTypes.number.isRequired,
+    carrier: PropTypes.string.isRequired,
+    segments: PropTypes.arrayOf(
+      PropTypes.shape({
+        origin: PropTypes.string.isRequired,
+        destination: PropTypes.string.isRequired,
+        date: PropTypes.string.isRequired,
+        duration: PropTypes.number.isRequired,
+        stops: PropTypes.arrayOf(PropTypes.string).isRequired,
+      })
+    ).isRequired,
+  }).isRequired,
 }
 
 export default Ticket

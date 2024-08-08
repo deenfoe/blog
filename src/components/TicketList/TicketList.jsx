@@ -1,32 +1,28 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
+import { BiMessageError } from 'react-icons/bi'
 
 import {
   selectTickets,
-  selectLoading,
-  selectError,
   selectStop,
   selectSearchId,
   selectDisplayedTicketsCount,
   fetchSearchId,
   fetchTickets,
-  showMoreTickets,
 } from '../../redux/slices/ticketsSlice'
 import { selectFilters } from '../../redux/slices/filterSlice'
-import { BiMessageError } from 'react-icons/bi'
 import Ticket from '../Ticket/Ticket'
 import filterTickets from '../../utils/filterTickets'
-import styles from './TicketList.module.scss'
 import { selectButtons } from '../../redux/slices/ticketSortSlice'
+
+import styles from './TicketList.module.scss'
 
 function TicketList() {
   const dispatch = useDispatch()
   const tickets = useSelector(selectTickets)
   const displayedTicketesCount = useSelector(selectDisplayedTicketsCount)
   const filters = useSelector(selectFilters)
-  const loading = useSelector(selectLoading)
-  const error = useSelector(selectError)
   const stop = useSelector(selectStop)
   const searchId = useSelector(selectSearchId)
 
@@ -51,6 +47,7 @@ function TicketList() {
       }, 1000)
       return () => clearInterval(interval)
     }
+    return undefined
   }, [dispatch, searchId, stop])
 
   // обновляет состояние noFilteredTickets при изменении tickets, filters или activeButton.

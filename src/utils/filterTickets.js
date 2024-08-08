@@ -1,21 +1,8 @@
-// Основная функция для фильтрации и сортировки билетов
-function filterTickets(data, filters, activeButton) {
-  // Сначала фильтруем билеты по количеству остановок
-  const filteredTickets = filterByStops(data, filters)
-
-  // Затем сортируем отфильтрованные билеты
-  return sortTickets(filteredTickets, activeButton)
-}
-
 // Функция для фильтрации билетов по количеству остановок
 function filterByStops(data, filters) {
-  const totalStops = []
   // Собираем ключи из filters, которые имеют значение true
-  for (const value in filters) {
-    if (filters[value]) {
-      totalStops.push(value) // Добавляем ключи (noStops, oneStop, twoStops, threeStops) в массив
-    }
-  }
+  const totalStops = Object.keys(filters).filter((key) => filters[key])
+
   // Фильтруем билеты по количеству остановок
   return data.filter((ticket) => {
     return ticket.segments.every((item) => {
@@ -86,6 +73,15 @@ function sortTickets(tickets, activeButton) {
       // Возвращаем исходный массив билетов без сортировки
       return tickets
   }
+}
+
+// Основная функция для фильтрации и сортировки билетов
+function filterTickets(data, filters, activeButton) {
+  // Сначала фильтруем билеты по количеству остановок
+  const filteredTickets = filterByStops(data, filters)
+
+  // Затем сортируем отфильтрованные билеты
+  return sortTickets(filteredTickets, activeButton)
 }
 
 export default filterTickets

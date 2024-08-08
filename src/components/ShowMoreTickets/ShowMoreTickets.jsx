@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { selectLoading, selectTickets, showMoreTickets } from '../../redux/slices/ticketsSlice'
+
+import { selectTickets, showMoreTickets } from '../../redux/slices/ticketsSlice'
 import filterTickets from '../../utils/filterTickets'
-import { BiMessageError } from 'react-icons/bi'
-import styles from './ShowMoreTickets.module.scss'
 import { selectFilters } from '../../redux/slices/filterSlice'
-import { selectButtons, setActiveButton } from '../../redux/slices/ticketSortSlice'
+import { selectButtons } from '../../redux/slices/ticketSortSlice'
+
+import styles from './ShowMoreTickets.module.scss'
 
 function ShowMoreTickets() {
   const dispatch = useDispatch()
@@ -12,7 +13,6 @@ function ShowMoreTickets() {
   const filters = useSelector(selectFilters)
   const activeButton = useSelector(selectButtons)
   const filteredTickets = filterTickets(tickets, filters, activeButton)
-  const loading = useSelector(selectLoading)
 
   const handleShowMoreTickets = () => {
     dispatch(showMoreTickets())

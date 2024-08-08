@@ -1,6 +1,7 @@
 import { BarLoader } from 'react-spinners'
-import { selectStop } from '../../redux/slices/ticketsSlice'
 import { useSelector } from 'react-redux'
+
+import { selectStop } from '../../redux/slices/ticketsSlice'
 
 function LoadingBar() {
   const stop = useSelector(selectStop)

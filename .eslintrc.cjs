@@ -30,6 +30,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': [0, { extensions: ['.js', '.jsx', '.tsx'] }],
     'react/button-has-type': 0,
+    'no-param-reassign': ['error', { props: false }],
     'prettier/prettier': 'error',
     'linebreak-style': [0, 'unix'],
     'import/order': [

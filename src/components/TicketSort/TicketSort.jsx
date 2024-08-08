@@ -1,5 +1,7 @@
-import { selectButtons, setActiveButton } from '../../redux/slices/ticketSortSlice'
 import { useDispatch, useSelector } from 'react-redux'
+
+import { selectButtons, setActiveButton } from '../../redux/slices/ticketSortSlice'
+
 import styles from './TicketSort.module.scss'
 
 function TicketSort() {
