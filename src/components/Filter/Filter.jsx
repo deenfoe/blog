@@ -55,6 +55,7 @@ function Filter() {
               onChange={() => handleCheckboxChange('noStops')}
               className={styles.filterInput}
             />
+            <span className={styles.filterCustomCheckbox} />
             <span className={styles.filterText}>Без пересадок</span>
           </label>
           <label htmlFor="1" className={styles.filterLabel}>
@@ -65,6 +66,7 @@ function Filter() {
               onChange={() => handleCheckboxChange('oneStop')}
               className={styles.filterInput}
             />
+            <span className={styles.filterCustomCheckbox} />
             <span className={styles.filterText}>1 пересадка</span>
           </label>
         </div>
@@ -78,6 +80,7 @@ function Filter() {
               onChange={() => handleCheckboxChange('twoStops')}
               className={styles.filterInput}
             />
+            <span className={styles.filterCustomCheckbox} />
             <span className={styles.filterText}>2 пересадки</span>
           </label>
           <label htmlFor="3" className={styles.filterLabel}>
@@ -88,6 +91,7 @@ function Filter() {
               onChange={() => handleCheckboxChange('threeStops')}
               className={styles.filterInput}
             />
+            <span className={styles.filterCustomCheckbox} />
             <span className={styles.filterText}>3 пересадки</span>
           </label>
         </div>
