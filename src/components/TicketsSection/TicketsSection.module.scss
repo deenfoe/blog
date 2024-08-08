@@ -3,36 +3,4 @@
   background-color: #f3f7fa;
 }
 
-.error {
-  color: rgb(85, 0, 0);
-  text-align: center;
-}
-.errorIcon {
-  font-size: 35px;
-}
-
-.errorText {
-  margin: 0;
-  color: rgb(52, 52, 52);
-}
-.test {
-  max-width: 666px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.loadingBar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 9999;
-}
-
-.nprogress-bar {
-  background: #29d;
-  height: 2px;
-}
 

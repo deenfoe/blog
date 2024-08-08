@@ -3,3 +3,16 @@
   flex-direction: column;
   gap: 20px;
 }
+
+.error {
+  color: rgb(85, 0, 0);
+  text-align: center;
+}
+.errorIcon {
+  font-size: 35px;
+}
+
+.errorText {
+  margin: 0;
+  color: rgb(52, 52, 52);
+}
