@@ -63,24 +63,29 @@
     align-self: normal;
     flex-basis: 5%;
   }
+
   .filterLabel {
     display: flex;
     flex-direction: row;
     margin-left: -15px;
   }
+
   .filterDesc {
     justify-content: center;
   }
+
   .filterLabelWrap {
     display: flex;
     flex-direction: column;
   }
+
   .filterLabels {
     display: flex;
     justify-content: center;
     align-self: center;
     gap: 10px;
   }
+  
   .filterInput {
     margin: 0;
   }
