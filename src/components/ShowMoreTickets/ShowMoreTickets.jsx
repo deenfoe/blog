@@ -17,15 +17,7 @@ function ShowMoreTickets() {
   const handleShowMoreTickets = () => {
     dispatch(showMoreTickets())
   }
-  // filteredTickets
-  // if (loading && filteredTickets.length === 0) {
-  //   return (
-  //     <div className={styles.error}>
-  //       <BiMessageError className={styles.errorIcon} />
-  //       <h4 className={styles.errorText}>Под заданные фильтры подходяших билетов не найдено</h4>
-  //     </div>
-  //   )
-  // }
+
   return (
     filteredTickets.length > 0 && (
       <button className={styles.showMoreTicketsBtn} onClick={handleShowMoreTickets}>
@@ -33,11 +25,5 @@ function ShowMoreTickets() {
       </button>
     )
   )
-
-  // <div>
-  //   <button className={styles.showMoreTicketsBtn} onClick={handleShowMoreTickets}>
-  //     ПОКАЗАТЬ ЕЩЕ 5 БИЛЕТОВ!
-  //   </button>
-  // </div>
 }
 export default ShowMoreTickets

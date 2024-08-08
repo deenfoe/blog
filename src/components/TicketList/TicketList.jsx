@@ -25,7 +25,6 @@ function TicketList() {
   const filters = useSelector(selectFilters)
   const stop = useSelector(selectStop)
   const searchId = useSelector(selectSearchId)
-
   const activeButton = useSelector(selectButtons)
 
   // Состояние для отслеживания первого получения данных
@@ -64,7 +63,7 @@ function TicketList() {
     return (
       <div className={styles.error}>
         <BiMessageError className={styles.errorIcon} />
-        <h4 className={styles.errorText}>Под заданные фильтры подходящих билетов не найдено</h4>
+        <h3 className={styles.errorText}>По заданным фильтрам подходящих билетов не найдено</h3>
       </div>
     )
   }
