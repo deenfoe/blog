@@ -1,0 +1,45 @@
+.profileTitle {
+  font-family: 'Roboto';
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 28px;
+  text-align: center;
+  margin: 0 0 25px;
+}
+
+.editProfileForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.profileInput {
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid #d9d9d9;
+  box-sizing: border-box;
+  padding: 8px 12px;
+}
+
+.profileButton {
+  height: 40px;
+  background-color: #1890ff;
+  border-radius: 4px;
+  border: none;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  margin-top: 9px;
+}
