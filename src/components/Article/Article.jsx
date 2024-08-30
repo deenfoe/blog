@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import dateFormatter from '../../utils/dateFormatter'
 import Markdown from 'markdown-to-jsx'
 import formatMarkdownSeparators from '../../utils/formatMarkdownSeparators'
+import defaultImg from '../../assets/images/default-image.svg'
 import styles from './Article.module.scss'
 
 function Article({ article, variant }) {
@@ -29,7 +30,7 @@ function Article({ article, variant }) {
             <p className={styles.articleAuthorName}>{article.author.username}</p>
             <p className={styles.articleAuthorDate}>{dateFormatter(article.createdAt)}</p>
           </div>
-          <img className={styles.img} src={article.author.image} alt={article.author.username} />
+          <img className={styles.img} src={article.author.image || defaultImg} alt={article.author.username} />
         </div>
       </div>
 

@@ -29,6 +29,28 @@
   border: 1px solid #d9d9d9;
   box-sizing: border-box;
   padding: 8px 12px;
+  transition: border-color 0.3s;
+  &:hover {
+    border: 1px solid #484848;
+  }
+  &:focus {
+    border: 1px solid #1890ff; /* синий цвет рамки при фокусе */
+    outline: none; /* убираем стандартное выделение */
+  }
+}
+
+.inputError {
+  border: 1px solid red;
+}
+
+.errorText {
+  margin: 0;
+  padding: 0;
+  color: red; /* или любой другой цвет */
+  font-size: 14px; /* уменьшите размер шрифта по мере необходимости */
+  line-height: 22px;
+  font-weight: 400;
+  font-family: 'Roboto';
 }
 
 .profileButton {
@@ -42,4 +64,17 @@
   line-height: 24px;
   text-align: center;
   margin-top: 9px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:disabled {
+    background-color: #188fff68; /* Цвет для неактивной кнопки */
+    cursor: not-allowed;
+  }
 }
+
+// .profileButtonDisabled {
+//   background-color: #188fff68; /* Цвет для неактивной кнопки */
+//   color: #ffffff;
+//   cursor: not-allowed;
+// }

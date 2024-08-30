@@ -1,12 +1,13 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
-import styles from './SignUpForm.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchSignUp, selectState } from '../../redux/slices/authFormSlice'
+
+import styles from './SignUpForm.module.scss'
 
 const schema = yup.object().shape({
   username: yup.string().required('Username is required'),
@@ -25,7 +26,8 @@ const schema = yup.object().shape({
 })
 
 function SignUpForm() {
-  // const test = useSelector(selectState)
+  const { user } = useSelector(selectState)
+  const navigate = useNavigate()
   // console.log(test)
   const dispatch = useDispatch()
 
@@ -45,6 +47,12 @@ function SignUpForm() {
     dispatch(fetchSignUp({ username, email, password }))
   }
 
+  useEffect(() => {
+    if (user) {
+      navigate('/')
+    }
+  }, [user, navigate])
+
   return (
     <div>
       <h2 className={styles.signUpTitle}>Create new account</h2>
@@ -54,6 +62,7 @@ function SignUpForm() {
           <input
             className={`${styles.signUpInput} ${errors.username ? styles.inputError : ''}`}
             name="username"
+            type="text"
             placeholder="Username"
             {...register('username')}
           />
@@ -65,6 +74,7 @@ function SignUpForm() {
           <input
             className={`${styles.signUpInput} ${errors.email ? styles.inputError : ''}`}
             name="email"
+            type="text"
             placeholder="Email address"
             {...register('email')}
           />
@@ -76,6 +86,7 @@ function SignUpForm() {
           <input
             className={`${styles.signUpInput} ${errors.password ? styles.inputError : ''}`}
             name="password"
+            type="password"
             placeholder="Password"
             {...register('password')}
           />
@@ -87,6 +98,7 @@ function SignUpForm() {
           <input
             className={`${styles.signUpInput} ${errors.repeatPassword ? styles.inputError : ''}`}
             name="repeatPassword"
+            type="password"
             placeholder="Repeat Password"
             {...register('repeatPassword')}
           />

@@ -5,6 +5,8 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './SignInForm.module.scss'
+import { fetchSignIn, selectState } from '../../redux/slices/authFormSlice'
+import { useEffect } from 'react'
 
 const schema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -17,6 +19,11 @@ const schema = yup.object().shape({
 })
 
 function SignInForm() {
+  const dispatch = useDispatch()
+  const { user } = useSelector(selectState)
+  const navigate = useNavigate()
+  // console.log(test)
+  console.log(localStorage.getItem('user'))
   const {
     register,
     handleSubmit,
@@ -24,8 +31,16 @@ function SignInForm() {
   } = useForm({ resolver: yupResolver(schema), mode: 'onTouched' })
 
   const submitForm = (data) => {
+    const { email, password } = data
     console.log(data)
+    dispatch(fetchSignIn({ email, password }))
   }
+
+  useEffect(() => {
+    if (user) {
+      navigate('/')
+    }
+  }, [user, navigate])
 
   return (
     <div>
