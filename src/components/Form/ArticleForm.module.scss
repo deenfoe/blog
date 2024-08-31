@@ -1,0 +1,89 @@
+.articleFormContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Roboto';
+}
+.articleForm {
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
+  // box-sizing: border-box;
+}
+
+.articleFormTitle {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.articleFormLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.articleFormInput {
+  color: #262626;
+  font-size: 16px;
+  line-height: 22px;
+  border: 1px solid #d9d9d9;
+  height: 40px;
+  border-radius: 3px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+
+.articleFormTextarea {
+  width: 100%;
+  height: 168px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  resize: none;
+
+  box-sizing: border-box;
+}
+
+.articleFormTags {
+  display: flex;
+  gap: 17px;
+  flex-wrap: wrap;
+  // box-sizing: border-box;
+  // justify-content: flex-start;
+}
+
+.articleFormButton {
+  height: 40px;
+  border-radius: 5px;
+  font-family: 'Roboto';
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  box-sizing: border-box;
+}
+
+.sendBtn {
+  max-width: 319px;
+  color: #ffff;
+  background-color: #1890ff;
+  border: none;
+}
+
+.deleteBtn {
+  max-width: 120px;
+  border: 1px solid #f5222d;
+  color: #f5222d;
+  background-color: #ffff;
+  padding: 8px 36px;
+}
+
+.addBtn {
+  max-width: 136px;
+  border: 1px solid #1890ff;
+  color: #1890ff;
+  background-color: #ffff;
+  padding: 8px 36px;
+}

@@ -11,6 +11,8 @@ import LoginForm from '../Form/SignInForm'
 import SingInPage from '../../pages/SignInPage/SignInPage'
 import ProfilePage from '../../pages/ProfilePage/ProfilePage'
 import { selectIsAuthenticated } from '../../redux/slices/authFormSlice'
+import NewArticlePage from '../../pages/NewArticlePage/NewArticlePage'
+import EditArticlePage from '../../pages/EditArticlePage/EditArticlePage'
 
 function App() {
   const isAuthenticated = useSelector(selectIsAuthenticated)
@@ -37,6 +39,8 @@ function App() {
           <Route path="sign-up" element={<SignUpPage />} />
           <Route path="sign-in" element={<SingInPage />} />
           <Route path="profile" element={isAuthenticated ? <ProfilePage /> : <Navigate to="/sign-in" />} />
+          <Route path="new-article" element={<NewArticlePage />} />
+          <Route path="articles/:slug/edit" element={<EditArticlePage />} />
         </Route>
       </Routes>
     </div>
