@@ -5,7 +5,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './SignInForm.module.scss'
-import { fetchSignIn, selectState } from '../../redux/slices/authFormSlice'
+import { clearErrors, fetchSignIn, selectErrors, selectState, selectUser } from '../../redux/slices/authFormSlice'
 import { useEffect } from 'react'
 
 const schema = yup.object().shape({
@@ -19,14 +19,20 @@ const schema = yup.object().shape({
 })
 
 function SignInForm() {
+  const errorsFromServer = useSelector(selectErrors)
+  // console.log(errorsFromServer)
+
   const dispatch = useDispatch()
-  const { user } = useSelector(selectState)
+  const user = useSelector(selectUser)
+  // const { user } = useSelector(selectState)
+
   const navigate = useNavigate()
   // console.log(test)
   console.log(localStorage.getItem('user'))
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm({ resolver: yupResolver(schema), mode: 'onTouched' })
 
@@ -39,8 +45,14 @@ function SignInForm() {
   useEffect(() => {
     if (user) {
       navigate('/')
+      dispatch(clearErrors())
     }
-  }, [user, navigate])
+  }, [user, navigate, dispatch])
+
+  const handleEmailInput = (e) => {
+    const lowerCaseEmail = e.target.value.toLowerCase()
+    setValue('email', lowerCaseEmail, { shouldValidate: true }) // обновляем значение и запускаем валидацию
+  }
 
   return (
     <div>
@@ -53,6 +65,7 @@ function SignInForm() {
             className={`${styles.signInInput} ${errors.email ? styles.inputError : ''}`}
             type="text"
             placeholder="Email address"
+            onInput={handleEmailInput}
             {...register('email')}
           />
           <p className={styles.errorText}>{errors.email?.message}</p>
@@ -69,11 +82,11 @@ function SignInForm() {
           <p className={styles.errorText}>{errors.password?.message}</p>
         </label>
 
-        <button
-          className={`${styles.signInButton} ${!isValid ? styles.signInButtonDisabled : ''}`}
-          type="submit"
-          disabled={!isValid}
-        >
+        {errorsFromServer && (
+          <p className={styles.errorText}> Email or password {errorsFromServer['email or password']}</p>
+        )}
+
+        <button className={styles.signInButton} type="submit" disabled={!isValid}>
           Login
         </button>
 

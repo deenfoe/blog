@@ -3,11 +3,13 @@ import styles from './Header.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
 
 import img from '../../assets/images/default-image.svg'
-import { logout, selectState } from '../../redux/slices/authFormSlice'
+import { logout, selectState, selectUser } from '../../redux/slices/authFormSlice'
 
 function Header() {
-  const { user } = useSelector(selectState)
-  console.log(user)
+  const user = useSelector(selectUser)
+  // const { user } = useSelector(selectState)
+  selectUser
+  // console.log(user)
   const dispatch = useDispatch()
   const handleLogout = () => {
     dispatch(logout())

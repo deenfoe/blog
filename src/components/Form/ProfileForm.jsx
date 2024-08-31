@@ -5,11 +5,14 @@ import * as yup from 'yup'
 
 import styles from './ProfileForm.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchUserUpdate, selectState, selectUser } from '../../redux/slices/authFormSlice'
+import { clearErrors, fetchUserUpdate, selectErrors, selectState, selectUser } from '../../redux/slices/authFormSlice'
 import { useNavigate } from 'react-router-dom'
 
 const schema = yup.object().shape({
-  username: yup.string().required('Username is required'),
+  username: yup
+    .string()
+    .required('Username is required')
+    .matches(/^[a-zA-Z0-9]+$/, 'Username can only contain Latin letters and numbers'),
   email: yup.string().email('Invalid email').required('Email is required'),
   password: yup
     .string()
@@ -27,10 +30,13 @@ const schema = yup.object().shape({
 })
 
 function ProfileForm() {
+  const errorsFromServer = useSelector(selectErrors)
   const [formSubmitted, setFormSubmitted] = useState(false)
-  // const user = useSelector(selectUser)
-  const { user } = useSelector(selectState)
-  
+  const [updateError, setUpdateError] = useState(false)
+  const user = useSelector(selectUser)
+  console.log(user)
+  // const { user } = useSelector(selectState)
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -45,23 +51,56 @@ function ProfileForm() {
       username: user?.username,
       email: user?.email,
       image: user?.image,
-      password: '',
     },
   })
 
-  const submitForm = (userData) => {
-    // const { username, email, password } = data
-    console.log(userData)
-    dispatch(fetchUserUpdate(userData)).then(() => {
-      setFormSubmitted(true)
-    })
+  // const submitForm = (userData) => {
+  //   dispatch(fetchUserUpdate(userData)).then(() => {
+  //     setFormSubmitted(true)
+  //   })
+  // }
+
+  const submitForm = async (userData) => {
+    setUpdateError(false) // сбрасываем ошибку перед отправкой формы
+
+    if (!userData.password) {
+      delete userData.password
+    }
+
+    try {
+      const resultAction = await dispatch(fetchUserUpdate(userData))
+      if (fetchUserUpdate.fulfilled.match(resultAction)) {
+        // dispatch(clearErrors()) // Очищаем ошибки при успешном обновлении
+        setFormSubmitted(true)
+      } else {
+        setUpdateError(true) // Устанавливаем ошибку если запрос не был успешным
+      }
+    } catch (error) {
+      setUpdateError(true) // Устанавливаем ошибку в случае исключения
+    }
   }
 
+  // useEffect(() => {
+  //   if (formSubmitted && user) {
+  //     navigate('/')
+  //   }
+  // }, [formSubmitted, user, navigate])
+
   useEffect(() => {
-    if (formSubmitted && user) {
+    if (formSubmitted && !updateError) {
+      dispatch(clearErrors())
       navigate('/')
     }
-  }, [formSubmitted, user, navigate])
+    // Очистка ошибок при размонтировании компонента
+    // return () => {
+    //   dispatch(clearErrors())
+    // }
+  }, [formSubmitted, updateError, navigate, dispatch])
+
+  const handleEmailInput = (e) => {
+    const lowerCaseEmail = e.target.value.toLowerCase()
+    setValue('email', lowerCaseEmail, { shouldValidate: true }) // обновляем значение и запускаем валидацию
+  }
 
   return (
     <div>
@@ -85,6 +124,7 @@ function ProfileForm() {
             className={`${styles.profileInput} ${errors.email ? styles.inputError : ''}`}
             type="text"
             placeholder="Email address"
+            onInput={handleEmailInput}
             {...register('email')}
           />
           <p className={styles.errorText}>{errors.email?.message}</p>
@@ -109,6 +149,13 @@ function ProfileForm() {
           />
           <p className={styles.errorText}>{errors.image?.message}</p>
         </label>
+
+        {errorsFromServer && (
+          <>
+            {errorsFromServer.email && <p className={styles.errorText}>Email {errorsFromServer.email}</p>}
+            {errorsFromServer.username && <p className={styles.errorText}>Username {errorsFromServer.username}</p>}
+          </>
+        )}
 
         <button type="submit" className={`${styles.profileButton}`}>
           Save

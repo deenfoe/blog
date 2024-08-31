@@ -5,13 +5,17 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchSignUp, selectState } from '../../redux/slices/authFormSlice'
+import { fetchSignUp, selectErrors, selectState, selectUser } from '../../redux/slices/authFormSlice'
 
 import styles from './SignUpForm.module.scss'
 
 const schema = yup.object().shape({
-  username: yup.string().required('Username is required'),
+  username: yup
+    .string()
+    .required('Username is required')
+    .matches(/^[a-zA-Z0-9]+$/, 'Username can only contain Latin letters and numbers'),
   email: yup.string().email('Invalid email').required('Email is required'),
+  // .matches(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/, 'Email must be in lowercase letters only'),
   password: yup
     .string()
     .min(6, 'Password must be at least 3 characters')
@@ -26,7 +30,10 @@ const schema = yup.object().shape({
 })
 
 function SignUpForm() {
-  const { user } = useSelector(selectState)
+  const errorsFromServer = useSelector(selectErrors)
+  console.log(errorsFromServer)
+  const user = useSelector(selectUser)
+  // const { user } = useSelector(selectState)
   const navigate = useNavigate()
   // console.log(test)
   const dispatch = useDispatch()
@@ -34,6 +41,7 @@ function SignUpForm() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(schema),
@@ -52,6 +60,11 @@ function SignUpForm() {
       navigate('/')
     }
   }, [user, navigate])
+
+  const handleEmailInput = (e) => {
+    const lowerCaseEmail = e.target.value.toLowerCase()
+    setValue('email', lowerCaseEmail, { shouldValidate: true }) // обновляем значение и запускаем валидацию
+  }
 
   return (
     <div>
@@ -76,6 +89,7 @@ function SignUpForm() {
             name="email"
             type="text"
             placeholder="Email address"
+            onInput={handleEmailInput}
             {...register('email')}
           />
           <p className={styles.errorText}>{errors.email?.message}</p>
@@ -117,6 +131,13 @@ function SignUpForm() {
           I agree to the processing of my personal information
         </label>
         <p className={styles.errorText}>{errors.agreeCheckbox?.message}</p>
+
+        {errorsFromServer && (
+          <>
+            {errorsFromServer.email && <p className={styles.errorText}>Email {errorsFromServer.email}</p>}
+            {errorsFromServer.username && <p className={styles.errorText}>Username {errorsFromServer.username}</p>}
+          </>
+        )}
 
         <button
           className={`${styles.signUpButton} ${!isValid ? styles.signUpButtonDisabled : ''}`}

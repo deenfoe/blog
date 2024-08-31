@@ -45,6 +45,11 @@ a {
   border-radius: 50%;
   object-fit: cover; /* Обеспечивает сохранение пропорций изображения */
   object-position: center; /* Центрирует изображение в контейнере */
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    box-shadow: 0 0 15px 3px rgba(0, 166, 244, 0.7); /* Добавляем тень при наведении */
+    transform: scale(1.2); /* Увеличиваем размер изображения */
+  }
 }
 
 .profile {
