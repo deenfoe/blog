@@ -8,9 +8,8 @@ import styles from './Article.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser } from '../../redux/slices/authFormSlice'
 import { fetchDeleteArticle, resetSuccess, selectIsSuccess } from '../../redux/slices/articlesSlice'
-import { Button, Popconfirm } from 'antd'
+import { Button, Popconfirm, message } from 'antd'
 import useArticleFormatting from '../../hooks/useArticleFormatting'
-
 
 function Article({ article, variant }) {
   const { slug } = useParams()
@@ -32,7 +31,13 @@ function Article({ article, variant }) {
   const handleDeleteArticle = async () => {
     dispatch(resetSuccess())
     await dispatch(fetchDeleteArticle(slug))
+    showMessage()
     navigate('/')
+  }
+
+  // Функция для показа уведомления
+  const showMessage = () => {
+    message.success('Статья была успешно удалена', 1.5) // Показываем сообщение на 2 секунды
   }
 
   const { truncatedTitle, truncatedDescription, truncatedTagList } = useArticleFormatting(article, isFullArticle)
@@ -61,7 +66,6 @@ function Article({ article, variant }) {
 
           {isFullArticle && isAuthor && (
             <div className={styles.articleAuthorButtons}>
-   
               <Popconfirm
                 className={styles.deleteBtn}
                 onConfirm={handleDeleteArticle}

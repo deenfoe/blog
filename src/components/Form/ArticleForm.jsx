@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-
+import { message } from 'antd'
 import styles from './ArticleForm.module.scss'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -98,19 +98,19 @@ function ArticleForm({ title, initialData = {}, isEdit = false }) {
         console.log(article)
         await dispatch(fetchCreateArticle(article)).unwrap()
       }
-      navigate('/') // Перенаправление после успешного выполнения действия
+      showMessage()
+      setTimeout(() => {
+        navigate('/') // Перенаправление после успешного выполнения действия
+      }, 555)
       // dispatch(resetSuccess()) // Сбрасываем `isSuccess` после навигации
     } catch (error) {
       console.error('Error submitting form:', error)
     }
   }
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     navigate('/')
-  //     dispatch(resetSuccess())
-  //   }
-  // }, [isSuccess, navigate, dispatch])
+  const showMessage = () => {
+    message.success('Статья была успешно создана', 1.5) // Показываем сообщение на 2 секунды
+  }
 
   return (
     <div className={styles.articleFormContainer}>

@@ -14,6 +14,7 @@ import { selectIsAuthenticated } from '../../redux/slices/authFormSlice'
 import NewArticlePage from '../../pages/NewArticlePage/NewArticlePage'
 import EditArticlePage from '../../pages/EditArticlePage/EditArticlePage'
 import PrivateRoute from '../PrivateRoute/PrivateRoute'
+import NotFoundPage from '../../pages/NotFoundPage/NotFoundPage'
 
 function App() {
   const dispatch = useDispatch()
@@ -41,6 +42,7 @@ function App() {
           <Route path="profile" element={<PrivateRoute element={<ProfilePage />} />} />
           <Route path="new-article" element={<PrivateRoute element={<NewArticlePage />} />} />
           <Route path="articles/:slug/edit" element={<EditArticlePage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </div>

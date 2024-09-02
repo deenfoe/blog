@@ -88,13 +88,23 @@
   height: 40px;
   border-radius: 5px;
   max-width: 319px;
-  color: #ffff;
+  color: #fff;
   background-color: #1890ff;
   border: none;
-
   box-sizing: border-box;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition:
+    background-color 0.3s,
+    transform 0.1s;
+
+  &:hover {
+    background-color: #1071e1; /* более темный оттенок для эффекта при наведении */
+  }
+
+  &:active {
+    transform: translateY(2px); /* создаем эффект "продавливания" */
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15); /* добавляем легкую тень для эффекта глубины */
+  }
 
   &:disabled {
     background-color: #188fff68; /* Цвет для неактивной кнопки */

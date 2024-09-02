@@ -19,7 +19,6 @@ function ArticlePage() {
   const article = useSelector(selectArticleBySlug(slug))
 
   return <div className={styles.articlePage}>{article && <Article article={article} variant="full" />}</div>
-  // return <div className={styles.articlePage}>{article && <FullArticle article={article} />}</div>
 }
 
 export default ArticlePage

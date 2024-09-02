@@ -9,7 +9,8 @@ import {
 } from '../../redux/slices/articlesSlice'
 import Article from '../../components/Article/Article'
 import { useDispatch, useSelector } from 'react-redux'
-import { Pagination } from 'antd'
+import PaginationComponent from '../../components/PaginationComponent/PaginationComponent'
+
 import styles from './ArticlesPage.module.scss'
 
 function ArticlesPage() {
@@ -37,17 +38,11 @@ function ArticlesPage() {
           </li>
         ))}
       </ul>
-
-      <Pagination
-        showQuickJumper
-        align="center"
-        current={currentPage}
+      <PaginationComponent
+        currentPage={currentPage}
         pageSize={pageSize}
         total={articlesCount}
-        showSizeChanger={false}
         onChange={handlePageChange}
-        hideOnSinglePage
-        style={{ marginBottom: '30px' }}
       />
     </div>
   )
