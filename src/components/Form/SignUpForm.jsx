@@ -139,11 +139,7 @@ function SignUpForm() {
           </>
         )}
 
-        <button
-          className={`${styles.signUpButton} ${!isValid ? styles.signUpButtonDisabled : ''}`}
-          type="submit"
-          disabled={!isValid}
-        >
+        <button className={styles.signUpButton} type="submit" disabled={!isValid}>
           Create
         </button>
 

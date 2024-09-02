@@ -4,7 +4,7 @@ import styles from './NewArticlePage.module.scss'
 function NewArticlePage() {
   return (
     <div className={styles.newArticlePage}>
-      <ArticleForm />
+      <ArticleForm title='Create article' />
     </div>
   )
 }

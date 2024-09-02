@@ -70,6 +70,7 @@ function ProfileForm() {
     try {
       const resultAction = await dispatch(fetchUserUpdate(userData))
       if (fetchUserUpdate.fulfilled.match(resultAction)) {
+        localStorage.setItem('user', JSON.stringify(resultAction.payload))
         // dispatch(clearErrors()) // Очищаем ошибки при успешном обновлении
         setFormSubmitted(true)
       } else {

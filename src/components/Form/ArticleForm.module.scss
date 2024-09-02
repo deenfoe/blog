@@ -32,6 +32,23 @@
   border-radius: 3px;
   padding: 8px 12px;
   box-sizing: border-box;
+  // &:hover {
+  //   border: 1px solid #1890ff;
+  // }
+  &:focus {
+    border: 1px solid #1890ff; /* синий цвет рамки при фокусе */
+    outline: none; /* убираем стандартное выделение */
+  }
+}
+
+.errorText {
+  margin: 0;
+  padding: 0;
+  color: red; /* или любой другой цвет */
+  font-size: 14px; /* уменьшите размер шрифта по мере необходимости */
+  line-height: 22px;
+  font-weight: 400;
+  font-family: 'Roboto';
 }
 
 .articleFormTextarea {
@@ -44,6 +61,14 @@
   resize: none;
 
   box-sizing: border-box;
+
+  // &:hover {
+  //   border: 1px solid #1890ff;
+  // }
+  &:focus {
+    border: 1px solid #1890ff; /* синий цвет рамки при фокусе */
+    outline: none; /* убираем стандартное выделение */
+  }
 }
 
 .articleFormTags {
@@ -54,25 +79,32 @@
   // justify-content: flex-start;
 }
 
+.articleFormTagItem {
+  display: flex;
+  gap: 16px;
+}
+
 .articleFormButton {
   height: 40px;
   border-radius: 5px;
-  font-family: 'Roboto';
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-
-  box-sizing: border-box;
-}
-
-.sendBtn {
   max-width: 319px;
   color: #ffff;
   background-color: #1890ff;
   border: none;
+
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:disabled {
+    background-color: #188fff68; /* Цвет для неактивной кнопки */
+    cursor: not-allowed;
+  }
 }
 
 .deleteBtn {
+  height: 40px;
+  border-radius: 5px;
   max-width: 120px;
   border: 1px solid #f5222d;
   color: #f5222d;
@@ -81,6 +113,8 @@
 }
 
 .addBtn {
+  height: 40px;
+  border-radius: 5px;
   max-width: 136px;
   border: 1px solid #1890ff;
   color: #1890ff;

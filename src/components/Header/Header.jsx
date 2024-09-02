@@ -7,12 +7,13 @@ import { logout, selectState, selectUser } from '../../redux/slices/authFormSlic
 
 function Header() {
   const user = useSelector(selectUser)
-  // const { user } = useSelector(selectState)
-  selectUser
+
   // console.log(user)
   const dispatch = useDispatch()
+
   const handleLogout = () => {
     dispatch(logout())
+    localStorage.removeItem('user')
   }
 
   return (
@@ -23,6 +24,9 @@ function Header() {
       <div className={styles.links}>
         {user ? ( // <-- If user is logged in, show profile and logout options
           <>
+            <Link to="/new-article">
+              <div className={styles.createArticle}>Create article</div>
+            </Link>
             <Link to="/profile">
               <div className={styles.profile}>
                 <div className={styles.profileUserName}>{user.username}</div>

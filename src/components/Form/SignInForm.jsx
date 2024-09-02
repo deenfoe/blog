@@ -36,10 +36,17 @@ function SignInForm() {
     formState: { errors, isValid },
   } = useForm({ resolver: yupResolver(schema), mode: 'onTouched' })
 
-  const submitForm = (data) => {
+  const submitForm = async (data) => {
     const { email, password } = data
     console.log(data)
-    dispatch(fetchSignIn({ email, password }))
+    try {
+      const resultAction = await dispatch(fetchSignIn({ email, password }))
+      if (fetchSignIn.fulfilled.match(resultAction)) {
+        localStorage.setItem('user', JSON.stringify(resultAction.payload))
+      }
+    } catch (error) {
+      console.error('Error during sign in:', error)
+    }
   }
 
   useEffect(() => {

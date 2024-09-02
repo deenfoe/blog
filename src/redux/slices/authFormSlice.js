@@ -67,13 +67,14 @@ export const fetchUserUpdate = createAsyncThunk(
   }
 )
 
+
 const authFormSlice = createSlice({
   name: 'authForm',
   initialState,
   reducers: {
     logout: (state) => {
       state.user = null
-      localStorage.removeItem('user')
+      // localStorage.removeItem('user')
     },
     clearErrors: (state) => {
       state.errors = null
@@ -90,14 +91,14 @@ const authFormSlice = createSlice({
       })
       .addCase(fetchSignIn.fulfilled, (state, action) => {
         state.user = action.payload
-        localStorage.setItem('user', JSON.stringify(action.payload))
+        // localStorage.setItem('user', JSON.stringify(action.payload))
       })
       .addCase(fetchSignIn.rejected, (state, action) => {
         state.errors = action.payload.errors
       })
       .addCase(fetchUserUpdate.fulfilled, (state, action) => {
         state.user = action.payload
-        localStorage.setItem('user', JSON.stringify(action.payload))
+        // localStorage.setItem('user', JSON.stringify(action.payload))
       })
       .addCase(fetchUserUpdate.rejected, (state, action) => {
         state.errors = action.payload.errors
