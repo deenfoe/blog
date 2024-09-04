@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import styles from './SignInForm.module.scss'
 import { clearErrors, fetchSignIn, selectErrors, selectState, selectUser } from '../../redux/slices/authFormSlice'
 import { useEffect } from 'react'
+import { showSuccessToast } from '../../utils/toastify'
 
 const schema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -51,6 +52,8 @@ function SignInForm() {
 
   useEffect(() => {
     if (user) {
+      showSuccessToast('🦄 Вы успешно вошли в систему!')
+
       navigate('/')
       dispatch(clearErrors())
     }
@@ -64,7 +67,6 @@ function SignInForm() {
   return (
     <div>
       <h2 className={styles.signInTitle}>Sign In</h2>
-
       <form className={styles.signInForm} onSubmit={handleSubmit(submitForm)}>
         <label className={styles.signInLabel}>
           Email address

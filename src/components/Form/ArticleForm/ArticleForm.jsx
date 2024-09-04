@@ -1,12 +1,19 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { message } from 'antd'
+
 import styles from './ArticleForm.module.scss'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchCreateArticle, fetchUpdateArticle, resetSuccess, selectIsSuccess } from '../../redux/slices/articlesSlice'
-import { useNavigate } from 'react-router-dom'
+import {
+  fetchCreateArticle,
+  fetchUpdateArticle,
+  resetSuccess,
+  selectIsSuccess,
+} from '../../../redux/slices/articlesSlice'
+import { Link, useNavigate } from 'react-router-dom'
+import { RollbackOutlined } from '@ant-design/icons'
+import notifications from '../../../utils/notifications'
 
 const schema = yup.object().shape({
   title: yup.string().required('Поле Title является обязательным.'),
@@ -29,6 +36,7 @@ function ArticleForm({ title, initialData = {}, isEdit = false }) {
     },
   })
 
+  const { slug } = initialData
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const tagInputRef = useRef(null) // Создаем реф для поля ввода тега
@@ -98,19 +106,16 @@ function ArticleForm({ title, initialData = {}, isEdit = false }) {
         console.log(article)
         await dispatch(fetchCreateArticle(article)).unwrap()
       }
-      showMessage()
+      notifications(isEdit ? 'edit' : 'create')
       setTimeout(() => {
         navigate('/') // Перенаправление после успешного выполнения действия
-      }, 555)
+      }, 1000)
       // dispatch(resetSuccess()) // Сбрасываем `isSuccess` после навигации
     } catch (error) {
       console.error('Error submitting form:', error)
     }
   }
 
-  const showMessage = () => {
-    message.success('Статья была успешно создана', 1.5) // Показываем сообщение на 2 секунды
-  }
 
   return (
     <div className={styles.articleFormContainer}>
@@ -189,9 +194,17 @@ function ArticleForm({ title, initialData = {}, isEdit = false }) {
           </div>
         </label>
 
-        <button className={styles.articleFormButton} type="submit" disabled={!isValid}>
-          Send
-        </button>
+        <div className={styles.articleFormButtonWrap}>
+          <button className={styles.articleFormButton} type="submit" disabled={!isValid}>
+            Send
+          </button>
+
+          {isEdit && (
+            <Link to={`/articles/${slug}`}>
+              <RollbackOutlined style={{ color: '#1890FF', scale: '2 ' }} />
+            </Link>
+          )}
+        </div>
       </form>
     </div>
   )

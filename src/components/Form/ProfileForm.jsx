@@ -7,6 +7,7 @@ import styles from './ProfileForm.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import { clearErrors, fetchUserUpdate, selectErrors, selectState, selectUser } from '../../redux/slices/authFormSlice'
 import { useNavigate } from 'react-router-dom'
+import { showSuccessToast } from '../../utils/toastify'
 
 const schema = yup.object().shape({
   username: yup
@@ -89,6 +90,7 @@ function ProfileForm() {
 
   useEffect(() => {
     if (formSubmitted && !updateError) {
+      showSuccessToast('🦄 Вы успешно обновили данные!')
       dispatch(clearErrors())
       navigate('/')
     }

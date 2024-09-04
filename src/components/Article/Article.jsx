@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import dateFormatter from '../../utils/dateFormatter'
 import Markdown from 'markdown-to-jsx'
@@ -7,14 +7,25 @@ import defaultImg from '../../assets/images/default-image.svg'
 import styles from './Article.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser } from '../../redux/slices/authFormSlice'
-import { fetchDeleteArticle, resetSuccess, selectIsSuccess } from '../../redux/slices/articlesSlice'
-import { Button, Popconfirm, message } from 'antd'
+import {
+  fetchDeleteArticle,
+  fetchFavoriteArticle,
+  fetchUnFavoriteArticle,
+  resetSuccess,
+  selectIsSuccess,
+} from '../../redux/slices/articlesSlice'
+import { Popover, Button, Popconfirm } from 'antd'
+
+import { HeartOutlined, HeartFilled, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
+
 import useArticleFormatting from '../../hooks/useArticleFormatting'
+import notifications from '../../utils/notifications'
 
 function Article({ article, variant }) {
   const { slug } = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [popoverOpen, setPopoverOpen] = useState(false)
 
   const isFullArticle = variant === 'full'
 
@@ -31,13 +42,29 @@ function Article({ article, variant }) {
   const handleDeleteArticle = async () => {
     dispatch(resetSuccess())
     await dispatch(fetchDeleteArticle(slug))
-    showMessage()
-    navigate('/')
+    notifications('delete')
+    setTimeout(() => {
+      navigate('/')
+    }, 1000)
   }
 
-  // Функция для показа уведомления
-  const showMessage = () => {
-    message.success('Статья была успешно удалена', 1.5) // Показываем сообщение на 2 секунды
+  const handleFavorite = (event) => {
+    event.preventDefault() // Предотвращаем переход по ссылке
+    event.stopPropagation() // Останавливаем всплытие события
+
+    if (currentUser) {
+      dispatch(fetchFavoriteArticle(article.slug))
+    } else {
+      setPopoverOpen(true)
+      setTimeout(() => setPopoverOpen(false), 3000) // Скрыть Popover через 3 секунды
+    }
+  }
+
+  const handleUnFavorite = (event) => {
+    event.preventDefault() // Предотвращаем переход по ссылке
+    event.stopPropagation() // Останавливаем всплытие события
+
+    dispatch(fetchUnFavoriteArticle(article.slug))
   }
 
   const { truncatedTitle, truncatedDescription, truncatedTagList } = useArticleFormatting(article, isFullArticle)
@@ -46,7 +73,30 @@ function Article({ article, variant }) {
     <div className={`${styles.article} ${isFullArticle ? styles.full : styles.list}`}>
       <div className={styles.articleHeaderWrap}>
         <div className={styles.articleInfo}>
-          <h1 className={styles.articleInfoTitle}>{truncatedTitle}</h1>
+          <div className={styles.articleInfoHeader}>
+            <h1 className={styles.articleInfoTitle}>{truncatedTitle}</h1>
+
+            <Popover
+              content={
+                <span>
+                  <ExclamationCircleOutlined style={{ color: 'red', marginRight: 8 }} />
+                  Please sign in to favorite this article
+                </span>
+              }
+              trigger="click"
+              open={popoverOpen}
+              onOpenChange={(open) => !open && setPopoverOpen(false)} // Скрывать Popover при клике вне его
+            >
+              <div
+                className={styles.articleInfoFavorite}
+                onClick={article.favorited ? handleUnFavorite : handleFavorite}
+              >
+                {article.favorited ? <HeartFilled /> : <HeartOutlined />}
+                <span>{article.favoritesCount}</span>
+              </div>
+            </Popover>
+          </div>
+
           <div className={styles.articleInfoTags}>
             {truncatedTagList.map((tag, index) => (
               <span key={index}>{tag}</span>
@@ -73,6 +123,7 @@ function Article({ article, variant }) {
                 description="Вы точно хотите удалить эту статью?"
                 okText="Да"
                 cancelText="Нет"
+                icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
               >
                 <Button
                   danger

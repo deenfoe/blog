@@ -4,16 +4,31 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import img from '../../assets/images/default-image.svg'
 import { logout, selectState, selectUser } from '../../redux/slices/authFormSlice'
+import {
+  fetchArticles,
+  resetArticlesState,
+  resetFavorited,
+  selectArticles,
+  selectCurrentPage,
+  selectPageSize,
+  updateFavoriteStatus,
+} from '../../redux/slices/articlesSlice'
+import { showSuccessToast } from '../../utils/toastify'
 
 function Header() {
   const user = useSelector(selectUser)
-
-  // console.log(user)
+  const currentPage = useSelector(selectCurrentPage)
+  const pageSize = useSelector(selectPageSize)
   const dispatch = useDispatch()
 
   const handleLogout = () => {
     dispatch(logout())
     localStorage.removeItem('user')
+
+    showSuccessToast('🦄 Вы успешно вышли из системы!')
+
+    dispatch(fetchArticles({ page: currentPage, pageSize }))
+    // dispatch(resetFavorited());
   }
 
   return (
@@ -22,10 +37,10 @@ function Header() {
         <div className={styles.logo}>RealWorld Blog</div>
       </Link>
       <div className={styles.links}>
-        {user ? ( // <-- If user is logged in, show profile and logout options
+        {user ? (
           <>
             <Link to="/new-article">
-              <div className={styles.createArticle}>Create article</div>
+              <div className={`${styles.createArticle} ${styles.button}`}>Create article</div>
             </Link>
             <Link to="/profile">
               <div className={styles.profile}>
@@ -33,49 +48,21 @@ function Header() {
                 <img className={styles.img} src={user.image || img} alt={user.username} />
               </div>
             </Link>
-
-            <button className={styles.logout} onClick={handleLogout}>
+            <button className={`${styles.logout} ${styles.button}`} onClick={handleLogout}>
               Log Out
             </button>
           </>
         ) : (
-          // <-- If user is not logged in, show sign-in and sign-up buttons
           <>
             <Link to="/sign-in">
-              <div className={styles.signIn}>Sign In</div>
+              <div className={`${styles.signIn} ${styles.button}`}>Sign In</div>
             </Link>
             <Link to="/sign-up">
-              <div className={styles.signUp}>Sign Up</div>
+              <div className={`${styles.signUp} ${styles.button}`}>Sign Up</div>
             </Link>
           </>
         )}
       </div>
-      {/* {isLogged ? (
-        <div className={styles.links}>
-          <Link to="/profile">
-            <div className={styles.profile}>
-              <div>{loggedUser.username}</div>
-              <img className={styles.img} src={loggedUser?.image || img} alt={loggedUser.username} />
-            </div>
-          </Link>
-
-          <div className={styles.logout}>
-            <Link to="/logout">
-              <div className={styles.logout}>Logout</div>
-            </Link>
-          </div>
-        </div>
-      ) : (
-        <div className={styles.links}>
-          <Link to="/sign-in">
-            <div className={styles.signIn}>Sign In</div>
-          </Link>
-
-          <Link to="sign-up">
-            <div className={styles.signUp}>Sign Up</div>
-          </Link>
-        </div>
-      )} */}
     </header>
   )
 }

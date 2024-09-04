@@ -7,9 +7,27 @@ function useArticleFormatting(article, isFullArticle) {
   const { width } = useWindowSize()
 
   const titleMaxLength =
-    width < 500 ? 10 : width < 600 ? 16 : width < 700 ? 21 : width < 800 ? 26 : width < 900 ? 30 : 50
+    width < 450 ? 10 : width < 500 ? 16 : width < 550 ? 20 : width < 600 ? 26 : width < 650 ? 35 : width < 700 ? 40 : 50
   const descriptionMaxLength =
-    width < 500 ? 23 : width < 600 ? 70 : width < 700 ? 85 : width < 800 ? 120 : width < 928 ? 150 : 180
+    width < 500
+      ? 23
+      : width < 550
+        ? 70
+        : width < 600
+          ? 78
+          : width < 650
+            ? 85
+            : width < 700
+              ? 94
+              : width < 750
+                ? 102
+                : width < 800
+                  ? 109
+                  : width < 850
+                    ? 115
+                    : width < 900
+                      ? 120
+                      : 140
   const tagMaxLength = width < 500 ? 6 : width < 600 ? 8 : width < 900 ? 8 : 10
   const maxTagsCount = width < 500 ? 2 : width < 600 ? 2 : width < 700 ? 2 : width < 800 ? 4 : width < 928 ? 4 : 5
 

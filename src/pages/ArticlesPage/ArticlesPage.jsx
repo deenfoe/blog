@@ -24,7 +24,7 @@ function ArticlesPage() {
     dispatch(fetchArticles({ page: currentPage, pageSize }))
   }, [dispatch, currentPage, pageSize])
 
-  // console.log(articles)
+  console.log(articles)
 
   const handlePageChange = (page) => {
     dispatch(setCurrentPage(page))

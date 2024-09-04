@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchSignUp, selectErrors, selectState, selectUser } from '../../redux/slices/authFormSlice'
 
 import styles from './SignUpForm.module.scss'
+import { showSuccessToast } from '../../utils/toastify'
 
 const schema = yup.object().shape({
   username: yup
@@ -57,6 +58,8 @@ function SignUpForm() {
 
   useEffect(() => {
     if (user) {
+      showSuccessToast('🦄 Вы успешно создали  аккаунт!')
+
       navigate('/')
     }
   }, [user, navigate])

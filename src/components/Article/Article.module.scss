@@ -12,12 +12,18 @@
   background-color: #ffffff;
 
   &.list {
-    height: 140px;
+    height: 160px;
+    word-break: break-word;
+    // overflow-x: hidden;
   }
 
   &.full {
     flex-direction: column;
     height: auto;
+
+    word-break: break-word; /* предотвращает выход длинных слов за пределы контейнера */
+    overflow-wrap: break-word; /* переносит длинные слова на новую строку */
+    white-space: normal; /* позволяет тексту автоматически переноситься */
   }
 }
 
@@ -53,6 +59,28 @@
   }
 }
 
+.articleInfoHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 13px;
+  // box-sizing: border-box;
+}
+
+.articleInfoTitle {
+  display: flex;
+  word-break: break-all; /* предотвращает выход длинных слов за пределы контейнера */
+  // overflow-wrap: break-word; /* переносит длинные слова на новую строку */
+  // white-space: normal; /* позволяет тексту автоматически переноситься */
+}
+
+.articleInfoFavorite {
+  display: flex;
+  gap: 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
 .articleInfoTags {
   display: flex;
   flex-wrap: wrap;
@@ -81,6 +109,7 @@
   flex-direction: column;
   flex: 1 1 25%;
   gap: 20px;
+  // padding-right: 10px;
 }
 
 .articleAuthor {

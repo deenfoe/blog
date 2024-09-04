@@ -4,7 +4,8 @@ import { fetchArticles, selectArticleBySlug } from '../../redux/slices/articlesS
 
 import styles from './EditArticlePage.module.scss'
 import { useEffect } from 'react'
-import ArticleForm from '../../components/Form/ArticleForm'
+import ArticleForm from '../../components/Form/ArticleForm/ArticleForm'
+
 
 function EditArticlePage() {
   const { slug } = useParams()

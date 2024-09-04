@@ -84,10 +84,17 @@
   gap: 16px;
 }
 
+.articleFormButtonWrap {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
 .articleFormButton {
   height: 40px;
   border-radius: 5px;
   max-width: 319px;
+  width: 100%;
   color: #fff;
   background-color: #1890ff;
   border: none;
