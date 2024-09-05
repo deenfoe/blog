@@ -1,4 +1,7 @@
-.signUpTitle {
+// AuthForm.module.scss
+
+// Заголовки форм для различных режимов
+.formTitle {
   font-family: 'Roboto';
   font-weight: 700;
   font-size: 20px;
@@ -7,104 +10,113 @@
   margin: 0 0 25px;
 }
 
-.signUpForm {
+// Общие стили для формы
+.form {
   display: flex;
   flex-direction: column;
 }
 
-.signUpLabel {
+// Лейблы для всех инпутов
+.formLabel {
   display: flex;
   flex-direction: column;
   gap: 5px;
   margin-bottom: 12px;
-
   font-weight: 400;
   font-size: 14px;
   line-height: 22px;
 }
 
-.signUpLabelCheckbox {
-  flex-direction: row;
+// Лейбл для чекбокса
+.formLabelCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 400;
   font-size: 14px;
   line-height: 22px;
   color: #595959;
-  margin-bottom: 12px;
+  margin-bottom: 21px;
 }
 
-.signUpInputCheckbox {
-  margin-right: 8px;
-}
-
-.signUpInput {
+// Стили для инпутов
+.formInput {
   height: 40px;
   border-radius: 4px;
   border: 1px solid #d9d9d9;
   box-sizing: border-box;
   padding: 8px 12px;
   transition: border-color 0.3s;
+
   &:hover {
     border: 1px solid #484848;
   }
+
   &:focus {
-    border: 1px solid #1890ff; /* синий цвет рамки при фокусе */
-    outline: none; /* убираем стандартное выделение */
+    border: 1px solid #1890ff;
+    outline: none;
   }
 }
 
+// Стиль для чекбокса
+.formInputCheckbox {
+  margin-right: 8px;
+}
+
+// Ошибка для инпутов
 .inputError {
   border: 1px solid red;
 }
 
+// Текст ошибок
 .errorText {
   margin: 0;
   padding: 0;
-  color: red; /* или любой другой цвет */
-  font-size: 14px; /* уменьшите размер шрифта по мере необходимости */
+  color: red;
+  font-size: 14px;
   line-height: 22px;
   font-weight: 400;
   font-family: 'Roboto';
 }
 
-.signUpButton {
+// Кнопка отправки формы
+.formButton {
   height: 40px;
   background-color: #1890ff;
   border-radius: 4px;
-  // padding: 8px 16px;
   border: none;
   color: #fff;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
   text-align: center;
-  margin-top: 10px;
-  margin-bottom: 8px;
+  margin-top: 9px;
   cursor: pointer;
   transition: background-color 0.3s;
 
   &:disabled {
-    background-color: #188fff68; /* Цвет для неактивной кнопки */
+    background-color: #188fff68;
     cursor: not-allowed;
   }
 }
 
-
-.signInInfo {
+// Дополнительная информация под формой
+.formInfo {
   font-weight: 400;
   font-size: 12px;
   line-height: 20px;
   text-align: center;
 }
 
-// Полоса до чекбокса
-.signUpLine {
-  border: 1px solid #e8e8e8;
-  border-radius: 1px;
-  margin-top: 9px;
-  margin-bottom: 8px;
-}
-
+// Ссылка на другую страницу (вход/регистрация)
 .navLink {
   color: #1890ff;
   font-weight: 700;
+}
+
+// Полоса до чекбокса
+.formLine {
+  border: 1px solid #e8e8e8;
+  border-radius: 1px;
+  margin: 9px 0 8px;
 }

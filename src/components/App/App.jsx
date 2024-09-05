@@ -8,7 +8,7 @@ import ArticlePage from '../../pages/ArticlePage/ArticlePage'
 import ArticlesPage from '../../pages/ArticlesPage/ArticlesPage'
 import SignUpPage from '../../pages/SignUpPage/SignUpPage'
 import LoginForm from '../Form/SignInForm'
-import SingInPage from '../../pages/SignInPage/SignInPage'
+import SignInPage from '../../pages/SignInPage/SignInPage'
 import ProfilePage from '../../pages/ProfilePage/ProfilePage'
 import { selectIsAuthenticated } from '../../redux/slices/authFormSlice'
 import NewArticlePage from '../../pages/NewArticlePage/NewArticlePage'
@@ -38,7 +38,7 @@ function App() {
           <Route path="articles" element={<ArticlesPage />} />
           <Route path="articles/:slug" element={<ArticlePage />} />
           <Route path="sign-up" element={<SignUpPage />} />
-          <Route path="sign-in" element={<SingInPage />} />
+          <Route path="sign-in" element={<SignInPage />} />
           <Route path="profile" element={<PrivateRoute element={<ProfilePage />} />} />
           <Route path="new-article" element={<PrivateRoute element={<NewArticlePage />} />} />
           <Route path="articles/:slug/edit" element={<EditArticlePage />} />
