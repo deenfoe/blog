@@ -1,23 +1,23 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './SignInForm.module.scss'
-import { clearErrors, fetchSignIn, selectErrors, selectState, selectUser } from '../../redux/slices/authFormSlice'
+import { clearErrors, fetchSignIn, selectErrors, selectState, selectUser } from '../../../redux/slices/authFormSlice'
 import { useEffect } from 'react'
-import { showSuccessToast } from '../../utils/toastify'
+import { showSuccessToast } from '../../../utils/toastify'
+import { signInFormSchema } from '../../../validation/yupSchemas'
 
-const schema = yup.object().shape({
-  email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup
-    .string()
-    .min(6, 'Password must be at least 3 characters')
-    .max(40, 'Password must be at most 20 characters')
-    .matches(/\S/, 'Password cannot be empty or only spaces')
-    .required('Password is required'),
-})
+// const schema = yup.object().shape({
+//   email: yup.string().email('Неверный формат Email').required('Email обязателен'),
+//   password: yup
+//     .string()
+//     .min(6, 'Пароль должен быть минимум 6 символов')
+//     .max(40, 'Пароль должен быть максимум 40 символов')
+//     .matches(/\S/, 'Пароль не может быть пустым и содержать пробелы')
+//     .required('Password обязателен'),
+// })
 
 function SignInForm() {
   const errorsFromServer = useSelector(selectErrors)
@@ -30,12 +30,13 @@ function SignInForm() {
   const navigate = useNavigate()
   // console.log(test)
   console.log(localStorage.getItem('user'))
+
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors, isValid },
-  } = useForm({ resolver: yupResolver(schema), mode: 'onTouched' })
+  } = useForm({ resolver: yupResolver(signInFormSchema), mode: 'onTouched' })
 
   const submitForm = async (data) => {
     const { email, password } = data
@@ -66,14 +67,14 @@ function SignInForm() {
 
   return (
     <div>
-      <h2 className={styles.signInTitle}>Sign In</h2>
+      <h2 className={styles.signInTitle}>Войти</h2>
       <form className={styles.signInForm} onSubmit={handleSubmit(submitForm)}>
         <label className={styles.signInLabel}>
-          Email address
+          Email адрес
           <input
             className={`${styles.signInInput} ${errors.email ? styles.inputError : ''}`}
             type="text"
-            placeholder="Email address"
+            placeholder="Email адрес"
             onInput={handleEmailInput}
             {...register('email')}
           />
@@ -81,11 +82,11 @@ function SignInForm() {
         </label>
 
         <label className={styles.signInLabel}>
-          Password
+          Пароль
           <input
             className={`${styles.signInInput} ${errors.password ? styles.inputError : ''}`}
             type="password"
-            placeholder="Password"
+            placeholder="******"
             {...register('password')}
           />
           <p className={styles.errorText}>{errors.password?.message}</p>
@@ -96,13 +97,13 @@ function SignInForm() {
         )}
 
         <button className={styles.signInButton} type="submit" disabled={!isValid}>
-          Login
+          Войти
         </button>
 
         <div className={styles.signUpInfo}>
-          Don't have an account?{' '}
+          Нет аккаунта?{' '}
           <NavLink to="/sign-up" className={styles.navLink}>
-            Sign Up.
+            Зарегистрироваться.
           </NavLink>
         </div>
       </form>

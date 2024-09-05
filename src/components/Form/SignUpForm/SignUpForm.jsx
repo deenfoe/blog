@@ -5,30 +5,31 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchSignUp, selectErrors, selectState, selectUser } from '../../redux/slices/authFormSlice'
+import { fetchSignUp, selectErrors, selectState, selectUser } from '../../../redux/slices/authFormSlice'
 
 import styles from './SignUpForm.module.scss'
-import { showSuccessToast } from '../../utils/toastify'
+import { showSuccessToast } from '../../../utils/toastify'
+import { signUpFormSchema } from '../../../validation/yupSchemas'
 
-const schema = yup.object().shape({
-  username: yup
-    .string()
-    .required('Username is required')
-    .matches(/^[a-zA-Z0-9]+$/, 'Username can only contain Latin letters and numbers'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  // .matches(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/, 'Email must be in lowercase letters only'),
-  password: yup
-    .string()
-    .min(6, 'Password must be at least 3 characters')
-    .max(40, 'Password must be at most 20 characters')
-    .matches(/\S/, 'Password cannot be empty or only spaces')
-    .required('Password is required'),
-  repeatPassword: yup
-    .string()
-    .oneOf([yup.ref('password'), null], 'Passwords must match')
-    .required('Repeat Password is required'),
-  agreeCheckbox: yup.boolean().oneOf([true], 'You must accept the terms'),
-})
+// const schema = yup.object().shape({
+//   username: yup
+//     .string()
+//     .required('Имя пользователя обязательно')
+//     .matches(/^[a-zA-Z0-9]+$/, 'Имя пользователя может содержать только латинские буквы и цифры'),
+//   email: yup.string().email('Неверный email').required('Email обязателен'),
+//   // .matches(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/, 'Email must be in lowercase letters only'),
+//   password: yup
+//     .string()
+//     .min(6, 'Пароль должен быть минимум 6 символов')
+//     .max(40, 'Пароль должен быть максимум 40 символов')
+//     .matches(/\S/, 'Пароль не может быть пустым или состоять только из пробелов')
+//     .required('Пароль обязателен'),
+//   repeatPassword: yup
+//     .string()
+//     .oneOf([yup.ref('password'), null], 'Пароли должны совпадать')
+//     .required('Повтор пароля обязателен'),
+//   agreeCheckbox: yup.boolean().oneOf([true], 'Вы должны согласиться с условиями'),
+// })
 
 function SignUpForm() {
   const errorsFromServer = useSelector(selectErrors)
@@ -45,7 +46,7 @@ function SignUpForm() {
     setValue,
     formState: { errors, isValid },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(signUpFormSchema),
     mode: 'onTouched', // Включает валидацию в реальном времени
   })
 
@@ -71,27 +72,27 @@ function SignUpForm() {
 
   return (
     <div>
-      <h2 className={styles.signUpTitle}>Create new account</h2>
+      <h2 className={styles.signUpTitle}>Создать аккаунт</h2>
       <form className={styles.signUpForm} onSubmit={handleSubmit(submitForm)}>
         <label className={styles.signUpLabel}>
-          Username
+          Имя пользователя
           <input
             className={`${styles.signUpInput} ${errors.username ? styles.inputError : ''}`}
             name="username"
             type="text"
-            placeholder="Username"
+            placeholder="Имя пользователя"
             {...register('username')}
           />
           <p className={styles.errorText}>{errors.username?.message}</p>
         </label>
 
         <label className={styles.signUpLabel}>
-          Email address
+          Email адрес
           <input
             className={`${styles.signUpInput} ${errors.email ? styles.inputError : ''}`}
             name="email"
             type="text"
-            placeholder="Email address"
+            placeholder="Email адрес"
             onInput={handleEmailInput}
             {...register('email')}
           />
@@ -99,24 +100,24 @@ function SignUpForm() {
         </label>
 
         <label className={styles.signUpLabel}>
-          Password
+          Пароль
           <input
             className={`${styles.signUpInput} ${errors.password ? styles.inputError : ''}`}
             name="password"
             type="password"
-            placeholder="Password"
+            placeholder="******"
             {...register('password')}
           />
           <p className={styles.errorText}>{errors.password?.message}</p>
         </label>
 
         <label className={styles.signUpLabel}>
-          Repeat Password
+          Повтор пароля
           <input
             className={`${styles.signUpInput} ${errors.repeatPassword ? styles.inputError : ''}`}
             name="repeatPassword"
             type="password"
-            placeholder="Repeat Password"
+            placeholder="******"
             {...register('repeatPassword')}
           />
           <p className={styles.errorText}>{errors.repeatPassword?.message}</p>
@@ -131,7 +132,7 @@ function SignUpForm() {
             className={styles.signUpInputCheckbox}
             {...register('agreeCheckbox')}
           />
-          I agree to the processing of my personal information
+          Я согласен на обработку моих персональных данных
         </label>
         <p className={styles.errorText}>{errors.agreeCheckbox?.message}</p>
 
@@ -143,13 +144,13 @@ function SignUpForm() {
         )}
 
         <button className={styles.signUpButton} type="submit" disabled={!isValid}>
-          Create
+          Создать
         </button>
 
         <div className={styles.signInInfo}>
-          Already have an account?{' '}
+          Уже есть аккаунт?{' '}
           <NavLink to="/sign-in" className={styles.navLink}>
-            Sign In.
+            Войти.
           </NavLink>
         </div>
       </form>

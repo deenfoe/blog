@@ -5,30 +5,37 @@ import * as yup from 'yup'
 
 import styles from './ProfileForm.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearErrors, fetchUserUpdate, selectErrors, selectState, selectUser } from '../../redux/slices/authFormSlice'
+import {
+  clearErrors,
+  fetchUserUpdate,
+  selectErrors,
+  selectState,
+  selectUser,
+} from '../../../redux/slices/authFormSlice'
 import { useNavigate } from 'react-router-dom'
-import { showSuccessToast } from '../../utils/toastify'
+import { showSuccessToast } from '../../../utils/toastify'
+import { profileFormSchema } from '../../../validation/yupSchemas'
 
-const schema = yup.object().shape({
-  username: yup
-    .string()
-    .required('Username is required')
-    .matches(/^[a-zA-Z0-9]+$/, 'Username can only contain Latin letters and numbers'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup
-    .string()
-    .transform((value) => (value ? value : undefined)) // Преобразует пустую строку в undefined
-    .notRequired() // Делаем поле не обязательным
-    .min(6, 'Password must be at least 6 characters')
-    .max(40, 'Password must be at most 40 characters')
-    .matches(/\S/, 'Password cannot be empty or only spaces')
-    // .required('Password is required')
-    .optional(),
-  image: yup
-    .string()
-    .url('Invalid URL') // Проверка, что значение является корректным URL
-    .optional(), // Поле image не обязательно для заполнения (опционально)
-})
+// const schema = yup.object().shape({
+//   username: yup
+//     .string()
+//     .required('Имя пользователя обязательно')
+//     .matches(/^[a-zA-Z0-9]+$/, 'мя пользователя может содержать только латинские буквы и цифры'),
+//   email: yup.string().email('Неверный email').required('Email обязателен'),
+//   password: yup
+//     .string()
+//     .transform((value) => (value ? value : undefined)) // Преобразует пустую строку в undefined
+//     .notRequired() // Делаем поле не обязательным
+//     .min(6, 'Пароль должен быть минимум 6 символов')
+//     .max(40, 'Пароль должен быть максимум 40 символов')
+//     .matches(/\S/, 'Пароль не может быть пустым или состоять только из пробелов')
+//     // .required('Password is required')
+//     .optional(),
+//   image: yup
+//     .string()
+//     .url('неверный URL') // Проверка, что значение является корректным URL
+//     .optional(), // Поле image не обязательно для заполнения (опционально)
+// })
 
 function ProfileForm() {
   const errorsFromServer = useSelector(selectErrors)
@@ -36,7 +43,6 @@ function ProfileForm() {
   const [updateError, setUpdateError] = useState(false)
   const user = useSelector(selectUser)
   console.log(user)
-  // const { user } = useSelector(selectState)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -46,7 +52,7 @@ function ProfileForm() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(profileFormSchema),
     mode: 'onTouched', // Включает валидацию в реальном времени
     defaultValues: {
       username: user?.username,
@@ -54,12 +60,6 @@ function ProfileForm() {
       image: user?.image,
     },
   })
-
-  // const submitForm = (userData) => {
-  //   dispatch(fetchUserUpdate(userData)).then(() => {
-  //     setFormSubmitted(true)
-  //   })
-  // }
 
   const submitForm = async (userData) => {
     setUpdateError(false) // сбрасываем ошибку перед отправкой формы
@@ -82,12 +82,6 @@ function ProfileForm() {
     }
   }
 
-  // useEffect(() => {
-  //   if (formSubmitted && user) {
-  //     navigate('/')
-  //   }
-  // }, [formSubmitted, user, navigate])
-
   useEffect(() => {
     if (formSubmitted && !updateError) {
       showSuccessToast('🦄 Вы успешно обновили данные!')
@@ -107,47 +101,47 @@ function ProfileForm() {
 
   return (
     <div>
-      <h2 className={styles.profileTitle}>Edit Profile</h2>
+      <h2 className={styles.profileTitle}>Редактирование профиля</h2>
 
       <form className={styles.editProfileForm} onSubmit={handleSubmit(submitForm)}>
         <label className={styles.profileLabel}>
-          Username
+          Имя пользователя
           <input
             className={`${styles.profileInput} ${errors.username ? styles.inputError : ''}`}
             type="text"
-            placeholder="Username"
+            placeholder="Имя пользователя"
             {...register('username')}
           />
           <p className={styles.errorText}>{errors.username?.message}</p>
         </label>
 
         <label className={styles.profileLabel}>
-          Email address
+          Email адрес
           <input
             className={`${styles.profileInput} ${errors.email ? styles.inputError : ''}`}
             type="text"
-            placeholder="Email address"
+            placeholder="Email адрес"
             onInput={handleEmailInput}
             {...register('email')}
           />
           <p className={styles.errorText}>{errors.email?.message}</p>
         </label>
         <label className={styles.profileLabel}>
-          New password
+          Новый пароль
           <input
             className={`${styles.profileInput} ${errors.password ? styles.inputError : ''}`}
             type="password"
-            placeholder="New password"
+            placeholder="Новый пароль"
             {...register('password')}
           />
           <p className={styles.errorText}>{errors.password?.message}</p>
         </label>
 
         <label className={styles.profileLabel}>
-          Avatar image(url)
+          Изображение аватара (URL)
           <input
             className={`${styles.profileInput} ${errors.image ? styles.inputError : ''}`}
-            placeholder="Avatar image"
+            placeholder="ссылка"
             {...register('image')}
           />
           <p className={styles.errorText}>{errors.image?.message}</p>
@@ -161,7 +155,7 @@ function ProfileForm() {
         )}
 
         <button type="submit" className={`${styles.profileButton}`}>
-          Save
+          Сохранить
         </button>
       </form>
     </div>
