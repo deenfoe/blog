@@ -1,12 +1,19 @@
 import * as yup from 'yup'
 
+// Регулярное выражение для валидации email
+const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/
+
 // Схема для ProfileForm
 export const profileFormSchema = yup.object().shape({
   username: yup
     .string()
     .required('Имя пользователя обязательно')
     .matches(/^[a-zA-Z0-9]+$/, 'Имя пользователя может содержать только латинские буквы и цифры'),
-  email: yup.string().email('Неверный email').required('Email обязателен'),
+  email: yup
+    .string()
+    .email('Неверный email')
+    .required('Email обязателен')
+    .matches(emailRegex, 'Неверный формат email (пример: test@mail.com)'),
   password: yup
     .string()
     .transform((value) => (value ? value : undefined)) // Преобразует пустую строку в undefined
@@ -20,7 +27,11 @@ export const profileFormSchema = yup.object().shape({
 
 // Схема для SignInForm
 export const signInFormSchema = yup.object().shape({
-  email: yup.string().email('Неверный формат Email').required('Email обязателен'),
+  email: yup
+    .string()
+    .email('Неверный формат Email')
+    .required('Email обязателен')
+    .matches(emailRegex, 'Неверный формат email (пример: test@mail.com)'),
   password: yup
     .string()
     .min(6, 'Пароль должен быть минимум 6 символов')
@@ -35,7 +46,11 @@ export const signUpFormSchema = yup.object().shape({
     .string()
     .required('Имя пользователя обязательно')
     .matches(/^[a-zA-Z0-9]+$/, 'Имя пользователя может содержать только латинские буквы и цифры'),
-  email: yup.string().email('Неверный email').required('Email обязателен'),
+  email: yup
+    .string()
+    .email('Неверный email')
+    .required('Email обязателен')
+    .matches(emailRegex, 'Неверный формат email (пример: test@mail.com)'),
   password: yup
     .string()
     .min(6, 'Пароль должен быть минимум 6 символов')

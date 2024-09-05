@@ -2,43 +2,17 @@ import React, { useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchSignUp, selectErrors, selectState, selectUser } from '../../../redux/slices/authFormSlice'
-
-import styles from './SignUpForm.module.scss'
+import { fetchSignUp, selectErrors, selectUser } from '../../../redux/slices/authFormSlice'
 import { showSuccessToast } from '../../../utils/toastify'
 import { signUpFormSchema } from '../../../validation/yupSchemas'
-
-// const schema = yup.object().shape({
-//   username: yup
-//     .string()
-//     .required('Имя пользователя обязательно')
-//     .matches(/^[a-zA-Z0-9]+$/, 'Имя пользователя может содержать только латинские буквы и цифры'),
-//   email: yup.string().email('Неверный email').required('Email обязателен'),
-//   // .matches(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/, 'Email must be in lowercase letters only'),
-//   password: yup
-//     .string()
-//     .min(6, 'Пароль должен быть минимум 6 символов')
-//     .max(40, 'Пароль должен быть максимум 40 символов')
-//     .matches(/\S/, 'Пароль не может быть пустым или состоять только из пробелов')
-//     .required('Пароль обязателен'),
-//   repeatPassword: yup
-//     .string()
-//     .oneOf([yup.ref('password'), null], 'Пароли должны совпадать')
-//     .required('Повтор пароля обязателен'),
-//   agreeCheckbox: yup.boolean().oneOf([true], 'Вы должны согласиться с условиями'),
-// })
+import styles from './SignUpForm.module.scss'
 
 function SignUpForm() {
-  const errorsFromServer = useSelector(selectErrors)
-  console.log(errorsFromServer)
-  const user = useSelector(selectUser)
-  // const { user } = useSelector(selectState)
-  const navigate = useNavigate()
-  // console.log(test)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const errorsFromServer = useSelector(selectErrors)
+  const user = useSelector(selectUser)
 
   const {
     register,
@@ -52,8 +26,6 @@ function SignUpForm() {
 
   const submitForm = (data) => {
     const { username, email, password } = data
-    // console.log(data)
-    console.log({ username, email, password })
     dispatch(fetchSignUp({ username, email, password }))
   }
 

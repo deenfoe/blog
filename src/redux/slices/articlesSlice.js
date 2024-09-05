@@ -9,6 +9,7 @@ const initialState = {
   currentPage: 1,
   pageSize: 5,
   isSuccess: false,
+  isLoading: false,
 }
 
 export const fetchArticles = createAsyncThunk(
@@ -24,10 +25,19 @@ export const fetchArticles = createAsyncThunk(
         }
       : {}
 
+    // Проверяем, загружена ли статья по slug
     if (slug) {
+      const existingArticle = state.articles.articleBySlug[slug]
+      if (existingArticle) {
+        // Если статья уже загружена, просто возвращаем её
+        return { singleArticle: existingArticle }
+      }
+
+      // Если статья не загружена, делаем запрос
       const response = await axios.get(`https://blog.kata.academy/api/articles/${slug}`, config)
       return { singleArticle: response.data.article }
     } else {
+      // Если slug нет, значит это запрос для списка статей
       const response = await axios.get(
         `https://blog.kata.academy/api/articles?limit=${pageSize}&offset=${(page - 1) * pageSize}`,
         config
@@ -53,9 +63,7 @@ export const fetchCreateArticle = createAsyncThunk(
   async (userData, { getState, rejectWithValue }) => {
     try {
       const state = getState() // Получаем текущее состояние Redux
-      console.log(state)
       const token = state.authForm.user.token // Извлекаем токен пользователя из
-      console.log(token)
       const response = await axios.post(
         'https://blog.kata.academy/api/articles',
         {
@@ -67,7 +75,6 @@ export const fetchCreateArticle = createAsyncThunk(
           },
         }
       )
-      console.log(response.data.article)
       return response.data.article
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -103,13 +110,11 @@ export const fetchDeleteArticle = createAsyncThunk(
     try {
       const state = getState()
       const token = state.authForm.user.token
-      const response = await axios.delete(`https://blog.kata.academy/api/articles/${slug}`, {
+      await axios.delete(`https://blog.kata.academy/api/articles/${slug}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      console.log(slug)
-      console.log(response)
       return slug
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : error.message)
@@ -123,8 +128,6 @@ export const fetchFavoriteArticle = createAsyncThunk(
     try {
       const state = getState()
       const token = state.authForm.user.token
-      console.log(slug)
-      console.log(token)
       const response = await axios.post(
         `https://blog.kata.academy/api/articles/${slug}/favorite`,
         {},
@@ -135,7 +138,6 @@ export const fetchFavoriteArticle = createAsyncThunk(
         }
       )
 
-      console.log(response.data.article)
       return response.data.article
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -149,8 +151,6 @@ export const fetchUnFavoriteArticle = createAsyncThunk(
     try {
       const state = getState()
       const token = state.authForm.user.token
-      console.log(slug)
-      console.log(token)
       const response = await axios.delete(
         `https://blog.kata.academy/api/articles/${slug}/favorite`,
 
@@ -161,7 +161,6 @@ export const fetchUnFavoriteArticle = createAsyncThunk(
         }
       )
 
-      console.log(response.data.article)
       return response.data.article
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -179,27 +178,24 @@ const articlesSlice = createSlice({
     resetSuccess(state) {
       state.isSuccess = false
     },
-    // resetFavorited(state) {
-    //   state.articles = state.articles.map((article) => ({
-    //     ...article,
-    //     favorited: false,
-    //   }))
-
-    //   // Также обновляем articlesBySlug, если там есть статьи
-    //   Object.keys(state.articleBySlug).forEach((slug) => {
-    //     state.articleBySlug[slug].favorited = false
-    //   })
-    // },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchArticles.pending, (state) => {
+        state.isLoading = true
+      })
       .addCase(fetchArticles.fulfilled, (state, action) => {
+        state.isLoading = false
         if (action.payload.singleArticle) {
           state.articleBySlug[action.payload.singleArticle.slug] = action.payload.singleArticle
         } else {
           state.articles = action.payload.articles
           state.articlesCount = action.payload.articlesCount
         }
+      })
+      .addCase(fetchArticles.rejected, (state, action) => {
+        state.isSuccess = false
+        state.isLoading = false
       })
       .addCase(fetchCreateArticle.fulfilled, (state, action) => {
         state.isSuccess = true
@@ -232,7 +228,6 @@ const articlesSlice = createSlice({
         if (articleIndex !== -1) {
           state.articles[articleIndex] = updatedArticle
         }
-        console.log(updatedArticle)
       })
       .addCase(fetchUnFavoriteArticle.fulfilled, (state, action) => {
         const updatedArticle = action.payload
@@ -251,9 +246,8 @@ export const selectArticles = (state) => state.articles.articles
 export const selectArticlesCount = (state) => state.articles.articlesCount
 export const selectCurrentPage = (state) => state.articles.currentPage
 export const selectPageSize = (state) => state.articles.pageSize
-export const selectArticleBySlug = (slug) => (state) => state.articles.articleBySlug[slug]
-
 export const selectIsSuccess = (state) => state.articles.isSuccess
-// export const selectArticleBySlug = (state, slug) => state.articles.articleBySlug[slug]
+export const selectIsLoading = (state) => state.articles.isLoading
+export const selectArticleBySlug = (slug) => (state) => state.articles.articleBySlug[slug]
 
 export default articlesSlice.reducer

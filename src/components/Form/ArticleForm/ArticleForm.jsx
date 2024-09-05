@@ -1,7 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-
 import styles from './ArticleForm.module.scss'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,7 +12,7 @@ import {
 } from '../../../redux/slices/articlesSlice'
 import { Link, useNavigate } from 'react-router-dom'
 import { RollbackOutlined } from '@ant-design/icons'
-import notifications from '../../../utils/notifications'
+import { showSuccessToast } from '../../../utils/toastify'
 
 const schema = yup.object().shape({
   title: yup.string().required('Поле Title является обязательным.'),
@@ -103,19 +102,16 @@ function ArticleForm({ title, initialData = {}, isEdit = false }) {
         console.log('Editing article:', article)
         await dispatch(fetchUpdateArticle({ slug, articleData: article })).unwrap()
       } else {
-        console.log(article)
         await dispatch(fetchCreateArticle(article)).unwrap()
       }
-      notifications(isEdit ? 'edit' : 'create')
+      showSuccessToast(isEdit ? '🦄 Статья успешно отредактирована' : '🦄 Статья успешно создана')
       setTimeout(() => {
         navigate('/') // Перенаправление после успешного выполнения действия
       }, 1000)
-      // dispatch(resetSuccess()) // Сбрасываем `isSuccess` после навигации
     } catch (error) {
       console.error('Error submitting form:', error)
     }
   }
-
 
   return (
     <div className={styles.articleFormContainer}>

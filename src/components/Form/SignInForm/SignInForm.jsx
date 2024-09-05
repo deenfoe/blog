@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './SignInForm.module.scss'
@@ -9,27 +9,11 @@ import { useEffect } from 'react'
 import { showSuccessToast } from '../../../utils/toastify'
 import { signInFormSchema } from '../../../validation/yupSchemas'
 
-// const schema = yup.object().shape({
-//   email: yup.string().email('Неверный формат Email').required('Email обязателен'),
-//   password: yup
-//     .string()
-//     .min(6, 'Пароль должен быть минимум 6 символов')
-//     .max(40, 'Пароль должен быть максимум 40 символов')
-//     .matches(/\S/, 'Пароль не может быть пустым и содержать пробелы')
-//     .required('Password обязателен'),
-// })
-
 function SignInForm() {
-  const errorsFromServer = useSelector(selectErrors)
-  // console.log(errorsFromServer)
-
   const dispatch = useDispatch()
-  const user = useSelector(selectUser)
-  // const { user } = useSelector(selectState)
-
   const navigate = useNavigate()
-  // console.log(test)
-  console.log(localStorage.getItem('user'))
+  const errorsFromServer = useSelector(selectErrors)
+  const user = useSelector(selectUser)
 
   const {
     register,
@@ -40,7 +24,6 @@ function SignInForm() {
 
   const submitForm = async (data) => {
     const { email, password } = data
-    console.log(data)
     try {
       const resultAction = await dispatch(fetchSignIn({ email, password }))
       if (fetchSignIn.fulfilled.match(resultAction)) {

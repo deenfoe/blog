@@ -9,14 +9,13 @@ import Article from '../../components/Article/Article'
 function ArticlePage() {
   const { slug } = useParams() // Получаем slug из параметров URL
   const dispatch = useDispatch()
+  // Получение статьи из стейта по slug
+  const article = useSelector(selectArticleBySlug(slug))
 
   // Загрузка статьи
   useEffect(() => {
     dispatch(fetchArticles({ slug }))
   }, [dispatch, slug])
-
-  // Получение статьи из стейта по slug
-  const article = useSelector(selectArticleBySlug(slug))
 
   return <div className={styles.articlePage}>{article && <Article article={article} variant="full" />}</div>
 }

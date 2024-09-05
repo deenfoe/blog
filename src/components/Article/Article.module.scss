@@ -73,6 +73,17 @@
   // white-space: normal; /* позволяет тексту автоматически переноситься */
 }
 
+.articleInfoError {
+  font-size: 16px;
+  font-weight: 400;
+
+  & svg {
+    margin-right: 8px;
+    font-size: 16px;
+    color: red;
+  }
+}
+
 .articleInfoFavorite {
   display: flex;
   gap: 5px;

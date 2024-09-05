@@ -19,7 +19,7 @@ import { Popover, Button, Popconfirm } from 'antd'
 import { HeartOutlined, HeartFilled, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 
 import useArticleFormatting from '../../hooks/useArticleFormatting'
-import notifications from '../../utils/notifications'
+import { showSuccessToast } from '../../utils/toastify'
 
 function Article({ article, variant }) {
   const { slug } = useParams()
@@ -42,10 +42,8 @@ function Article({ article, variant }) {
   const handleDeleteArticle = async () => {
     dispatch(resetSuccess())
     await dispatch(fetchDeleteArticle(slug))
-    notifications('delete')
-    setTimeout(() => {
-      navigate('/')
-    }, 1000)
+    showSuccessToast('🦄 Статья успешно удалена')
+    navigate('/')
   }
 
   const handleFavorite = (event) => {
@@ -78,9 +76,9 @@ function Article({ article, variant }) {
 
             <Popover
               content={
-                <span>
-                  <ExclamationCircleOutlined style={{ color: 'red', marginRight: 8 }} />
-                  Please sign in to favorite this article
+                <span className={styles.articleInfoError}>
+                  <ExclamationCircleOutlined />
+                  Войдите, чтобы добавить эту статью в избранное.
                 </span>
               }
               trigger="click"

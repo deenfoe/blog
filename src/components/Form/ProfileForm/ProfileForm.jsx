@@ -1,48 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-
-import styles from './ProfileForm.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  clearErrors,
-  fetchUserUpdate,
-  selectErrors,
-  selectState,
-  selectUser,
-} from '../../../redux/slices/authFormSlice'
+import { clearErrors, fetchUserUpdate, selectErrors, selectUser } from '../../../redux/slices/authFormSlice'
 import { useNavigate } from 'react-router-dom'
 import { showSuccessToast } from '../../../utils/toastify'
 import { profileFormSchema } from '../../../validation/yupSchemas'
-
-// const schema = yup.object().shape({
-//   username: yup
-//     .string()
-//     .required('Имя пользователя обязательно')
-//     .matches(/^[a-zA-Z0-9]+$/, 'мя пользователя может содержать только латинские буквы и цифры'),
-//   email: yup.string().email('Неверный email').required('Email обязателен'),
-//   password: yup
-//     .string()
-//     .transform((value) => (value ? value : undefined)) // Преобразует пустую строку в undefined
-//     .notRequired() // Делаем поле не обязательным
-//     .min(6, 'Пароль должен быть минимум 6 символов')
-//     .max(40, 'Пароль должен быть максимум 40 символов')
-//     .matches(/\S/, 'Пароль не может быть пустым или состоять только из пробелов')
-//     // .required('Password is required')
-//     .optional(),
-//   image: yup
-//     .string()
-//     .url('неверный URL') // Проверка, что значение является корректным URL
-//     .optional(), // Поле image не обязательно для заполнения (опционально)
-// })
+import styles from './ProfileForm.module.scss'
 
 function ProfileForm() {
   const errorsFromServer = useSelector(selectErrors)
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [updateError, setUpdateError] = useState(false)
   const user = useSelector(selectUser)
-  console.log(user)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -72,7 +42,6 @@ function ProfileForm() {
       const resultAction = await dispatch(fetchUserUpdate(userData))
       if (fetchUserUpdate.fulfilled.match(resultAction)) {
         localStorage.setItem('user', JSON.stringify(resultAction.payload))
-        // dispatch(clearErrors()) // Очищаем ошибки при успешном обновлении
         setFormSubmitted(true)
       } else {
         setUpdateError(true) // Устанавливаем ошибку если запрос не был успешным
@@ -88,10 +57,6 @@ function ProfileForm() {
       dispatch(clearErrors())
       navigate('/')
     }
-    // Очистка ошибок при размонтировании компонента
-    // return () => {
-    //   dispatch(clearErrors())
-    // }
   }, [formSubmitted, updateError, navigate, dispatch])
 
   const handleEmailInput = (e) => {
