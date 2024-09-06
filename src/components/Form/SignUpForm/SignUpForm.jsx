@@ -3,9 +3,11 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { fetchSignUp, selectErrors, selectUser } from '../../../redux/slices/authFormSlice'
 import { showSuccessToast } from '../../../utils/toastify'
 import { signUpFormSchema } from '../../../validation/yupSchemas'
+
 import styles from './SignUpForm.module.scss'
 
 function SignUpForm() {
@@ -32,7 +34,6 @@ function SignUpForm() {
   useEffect(() => {
     if (user) {
       showSuccessToast('🦄 Вы успешно создали  аккаунт!')
-
       navigate('/')
     }
   }, [user, navigate])
@@ -95,7 +96,7 @@ function SignUpForm() {
           <p className={styles.errorText}>{errors.repeatPassword?.message}</p>
         </label>
 
-        <div className={styles.signUpLine}></div>
+        <div className={styles.signUpLine} />
 
         <label className={styles.signUpLabelCheckbox}>
           <input

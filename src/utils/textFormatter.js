@@ -3,12 +3,12 @@ export const truncateText = (text, maxLength) => {
   if (text.length > maxLength) {
     let truncated = text.substring(0, maxLength)
     if (truncated.endsWith(' ')) truncated = truncated.trimEnd()
-    return truncated + '...'
+    return `${truncated}...`
   }
   return text
 }
 
 export const truncateTags = (tags, maxTagLength = 10, maxTagsCount = 8) => {
-  const truncatedTags = tags.map((tag) => (tag.length > maxTagLength ? tag.substring(0, maxTagLength) + '...' : tag))
+  const truncatedTags = tags.map((tag) => (tag.length > maxTagLength ? `${tag.substring(0, maxTagLength)}...` : tag))
   return truncatedTags.slice(0, maxTagsCount)
 }

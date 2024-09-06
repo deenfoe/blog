@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+
 import { truncateText, truncateTags } from '../../utils/textFormatter'
 
 const initialState = {
@@ -10,6 +11,7 @@ const initialState = {
   pageSize: 5,
   isSuccess: false,
   isLoading: false,
+  errors: null,
 }
 
 export const fetchArticles = createAsyncThunk(
@@ -36,24 +38,23 @@ export const fetchArticles = createAsyncThunk(
       // Если статья не загружена, делаем запрос
       const response = await axios.get(`https://blog.kata.academy/api/articles/${slug}`, config)
       return { singleArticle: response.data.article }
-    } else {
-      // Если slug нет, значит это запрос для списка статей
-      const response = await axios.get(
-        `https://blog.kata.academy/api/articles?limit=${pageSize}&offset=${(page - 1) * pageSize}`,
-        config
-      )
+    }
+    // Если slug нет, значит это запрос для списка статей
+    const response = await axios.get(
+      `https://blog.kata.academy/api/articles?limit=${pageSize}&offset=${(page - 1) * pageSize}`,
+      config
+    )
 
-      const truncatedArticles = (response.data.articles || []).map((article) => ({
-        ...article,
-        title: truncateText(article.title, 50),
-        description: truncateText(article.description, 150),
-        tagList: truncateTags(article.tagList || []),
-      }))
+    const truncatedArticles = (response.data.articles || []).map((article) => ({
+      ...article,
+      title: truncateText(article.title, 50),
+      description: truncateText(article.description, 150),
+      tagList: truncateTags(article.tagList || []),
+    }))
 
-      return {
-        articles: truncatedArticles,
-        articlesCount: response.data.articlesCount,
-      }
+    return {
+      articles: truncatedArticles,
+      articlesCount: response.data.articlesCount,
     }
   }
 )
@@ -63,7 +64,7 @@ export const fetchCreateArticle = createAsyncThunk(
   async (userData, { getState, rejectWithValue }) => {
     try {
       const state = getState() // Получаем текущее состояние Redux
-      const token = state.authForm.user.token // Извлекаем токен пользователя из
+      const { token } = state.authForm.user // Извлекаем токен пользователя из
       const response = await axios.post(
         'https://blog.kata.academy/api/articles',
         {
@@ -87,7 +88,7 @@ export const fetchUpdateArticle = createAsyncThunk(
   async ({ slug, articleData }, { getState, rejectWithValue }) => {
     try {
       const state = getState()
-      const token = state.authForm.user.token
+      const { token } = state.authForm.user
       const response = await axios.put(
         `https://blog.kata.academy/api/articles/${slug}`,
         { article: articleData },
@@ -109,7 +110,7 @@ export const fetchDeleteArticle = createAsyncThunk(
   async (slug, { getState, rejectWithValue }) => {
     try {
       const state = getState()
-      const token = state.authForm.user.token
+      const { token } = state.authForm.user
       await axios.delete(`https://blog.kata.academy/api/articles/${slug}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -127,7 +128,7 @@ export const fetchFavoriteArticle = createAsyncThunk(
   async (slug, { getState, rejectWithValue }) => {
     try {
       const state = getState()
-      const token = state.authForm.user.token
+      const { token } = state.authForm.user
       const response = await axios.post(
         `https://blog.kata.academy/api/articles/${slug}/favorite`,
         {},
@@ -150,7 +151,7 @@ export const fetchUnFavoriteArticle = createAsyncThunk(
   async (slug, { getState, rejectWithValue }) => {
     try {
       const state = getState()
-      const token = state.authForm.user.token
+      const { token } = state.authForm.user
       const response = await axios.delete(
         `https://blog.kata.academy/api/articles/${slug}/favorite`,
 
@@ -183,6 +184,7 @@ const articlesSlice = createSlice({
     builder
       .addCase(fetchArticles.pending, (state) => {
         state.isLoading = true
+        state.errors = null
       })
       .addCase(fetchArticles.fulfilled, (state, action) => {
         state.isLoading = false
@@ -196,6 +198,7 @@ const articlesSlice = createSlice({
       .addCase(fetchArticles.rejected, (state, action) => {
         state.isSuccess = false
         state.isLoading = false
+        state.errors = action.error.message || 'Failed to load articles'
       })
       .addCase(fetchCreateArticle.fulfilled, (state, action) => {
         state.isSuccess = true
@@ -248,6 +251,7 @@ export const selectCurrentPage = (state) => state.articles.currentPage
 export const selectPageSize = (state) => state.articles.pageSize
 export const selectIsSuccess = (state) => state.articles.isSuccess
 export const selectIsLoading = (state) => state.articles.isLoading
+export const selectErrors = (state) => state.articles.errors
 export const selectArticleBySlug = (slug) => (state) => state.articles.articleBySlug[slug]
 
 export default articlesSlice.reducer

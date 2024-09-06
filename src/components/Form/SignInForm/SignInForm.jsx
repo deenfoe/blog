@@ -2,12 +2,13 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-
-import styles from './SignInForm.module.scss'
-import { clearErrors, fetchSignIn, selectErrors, selectState, selectUser } from '../../../redux/slices/authFormSlice'
 import { useEffect } from 'react'
+
+import { clearErrors, fetchSignIn, selectErrors, selectState, selectUser } from '../../../redux/slices/authFormSlice'
 import { showSuccessToast } from '../../../utils/toastify'
 import { signInFormSchema } from '../../../validation/yupSchemas'
+
+import styles from './SignInForm.module.scss'
 
 function SignInForm() {
   const dispatch = useDispatch()

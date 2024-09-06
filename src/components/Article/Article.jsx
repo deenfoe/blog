@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import dateFormatter from '../../utils/dateFormatter'
 import Markdown from 'markdown-to-jsx'
-import formatMarkdownSeparators from '../../utils/formatMarkdownSeparators'
-import defaultImg from '../../assets/images/default-image.svg'
-import styles from './Article.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
+import { Popover, Button, Popconfirm } from 'antd'
+import { HeartOutlined, HeartFilled, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
+
 import { selectUser } from '../../redux/slices/authFormSlice'
 import {
   fetchDeleteArticle,
@@ -14,12 +13,13 @@ import {
   resetSuccess,
   selectIsSuccess,
 } from '../../redux/slices/articlesSlice'
-import { Popover, Button, Popconfirm } from 'antd'
-
-import { HeartOutlined, HeartFilled, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
-
+import defaultImg from '../../assets/images/default-image.svg'
+import formatMarkdownSeparators from '../../utils/formatMarkdownSeparators'
+import dateFormatter from '../../utils/dateFormatter'
 import useArticleFormatting from '../../hooks/useArticleFormatting'
 import { showSuccessToast } from '../../utils/toastify'
+
+import styles from './Article.module.scss'
 
 function Article({ article, variant }) {
   const { slug } = useParams()
@@ -89,7 +89,7 @@ function Article({ article, variant }) {
                 className={styles.articleInfoFavorite}
                 onClick={article.favorited ? handleUnFavorite : handleFavorite}
               >
-                {article.favorited ? <HeartFilled /> : <HeartOutlined />}
+                {article.favorited ? <HeartFilled style={{ color: 'red' }} /> : <HeartOutlined />}
                 <span>{article.favoritesCount}</span>
               </div>
             </Popover>

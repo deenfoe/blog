@@ -1,5 +1,7 @@
 import React from 'react'
+
 import ProfileForm from '../../components/Form/ProfileForm/ProfileForm'
+
 import styles from './ProfilePage.module.scss'
 
 function ProfilePage() {

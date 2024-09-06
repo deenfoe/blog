@@ -1,16 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Alert, Spin } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   fetchArticles,
   selectArticles,
   selectArticlesCount,
   selectCurrentPage,
+  selectErrors,
   selectIsLoading,
   selectPageSize,
   setCurrentPage,
 } from '../../redux/slices/articlesSlice'
-import { Spin } from 'antd'
 import Article from '../../components/Article/Article'
-import { useDispatch, useSelector } from 'react-redux'
 import PaginationComponent from '../../components/PaginationComponent/PaginationComponent'
 
 import styles from './ArticlesPage.module.scss'
@@ -22,9 +23,61 @@ function ArticlesPage() {
   const currentPage = useSelector(selectCurrentPage)
   const pageSize = useSelector(selectPageSize)
   const isLoading = useSelector(selectIsLoading)
+  const errors = useSelector(selectErrors)
 
+  // Состояние для управления видимостью спиннера
+  const [showSpinner, setShowSpinner] = useState(false)
+
+  // useEffect(() => {
+  //   dispatch(fetchArticles({ page: currentPage, pageSize }))
+  // }, [dispatch, currentPage, pageSize])
+
+  // // Добавляем обработчик на событие фокуса окна
+  // useEffect(() => {
+  //   const handleFocus = () => {
+  //     // Когда окно становится активным, обновляем статьи
+  //     dispatch(fetchArticles({ page: currentPage, pageSize }))
+  //   }
+
+  //   // Добавляем событие
+  //   window.addEventListener('focus', handleFocus)
+
+  //   // Убираем обработчик при размонтировании компонента
+  //   return () => {
+  //     window.removeEventListener('focus', handleFocus)
+  //   }
+  // }, [dispatch, currentPage, pageSize])
   useEffect(() => {
     dispatch(fetchArticles({ page: currentPage, pageSize }))
+  }, [dispatch, currentPage, pageSize])
+
+  useEffect(() => {
+    let timer
+    if (isLoading) {
+      // Если загрузка началась, устанавливаем таймер на 2 секунды
+      timer = setTimeout(() => {
+        setShowSpinner(true)
+      }, 2000)
+    } else {
+      // Как только загрузка завершена, убираем спиннер
+      setShowSpinner(false)
+      clearTimeout(timer)
+    }
+    // Чистим таймер при размонтировании или завершении загрузки
+    return () => clearTimeout(timer)
+  }, [isLoading])
+
+  // Обработчик фокуса окна
+  useEffect(() => {
+    const handleFocus = () => {
+      dispatch(fetchArticles({ page: currentPage, pageSize }))
+    }
+
+    window.addEventListener('focus', handleFocus)
+
+    return () => {
+      window.removeEventListener('focus', handleFocus)
+    }
   }, [dispatch, currentPage, pageSize])
 
   const handlePageChange = (page) => {
@@ -32,10 +85,12 @@ function ArticlesPage() {
   }
   return (
     <div className={styles.articlesPage}>
-      {isLoading ? (
+      {showSpinner ? (
         <div className={styles.loader}>
-          <Spin size="large" /> {/* Отображаем анимацию загрузки */}
+          <Spin size="large" />
         </div>
+      ) : errors ? (
+        <Alert message="Ошибка при загрузке данных" description={errors} type="error" showIcon />
       ) : (
         <>
           <ul className={styles.articles}>

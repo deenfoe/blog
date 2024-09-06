@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import styles from './Header.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
 
 import img from '../../assets/images/default-image.svg'
@@ -14,6 +13,8 @@ import {
   updateFavoriteStatus,
 } from '../../redux/slices/articlesSlice'
 import { showSuccessToast } from '../../utils/toastify'
+
+import styles from './Header.module.scss'
 
 function Header() {
   const user = useSelector(selectUser)

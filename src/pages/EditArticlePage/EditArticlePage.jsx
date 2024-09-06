@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchArticles, selectArticleBySlug } from '../../redux/slices/articlesSlice'
-
-import styles from './EditArticlePage.module.scss'
 import { useEffect } from 'react'
+
+import { fetchArticles, selectArticleBySlug } from '../../redux/slices/articlesSlice'
 import ArticleForm from '../../components/Form/ArticleForm/ArticleForm'
 
+import styles from './EditArticlePage.module.scss'
 
 function EditArticlePage() {
   const { slug } = useParams()
@@ -19,7 +19,7 @@ function EditArticlePage() {
   }, [slug, dispatch, article])
   return (
     <div className={styles.editArticlePage}>
-      {article ? <ArticleForm title="Edit article" initialData={article} isEdit={true} /> : <p>Loading</p>}
+      {article ? <ArticleForm title="Edit article" initialData={article} isEdit /> : <p>Loading</p>}
     </div>
   )
 }

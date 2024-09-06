@@ -2,7 +2,7 @@
 function formatMarkdownSeparators(markdown) {
   // Проверка, является ли входной аргумент строкой
   if (typeof markdown !== 'string') {
-    return ''; // Возвращаем пустую строку, если входное значение не является строкой
+    return '' // Возвращаем пустую строку, если входное значение не является строкой
   }
 
   // Регулярное выражение для поиска разделителей `***`, `---`, `___`, которые не находятся в таблицах
@@ -16,16 +16,7 @@ function formatMarkdownSeparators(markdown) {
   })
 }
 
-export default formatMarkdownSeparators;
-
-
-
-
-
-
-
-
-
+export default formatMarkdownSeparators
 
 // function formatMarkdownSeparators(markdown) {
 //   // Регулярное выражение для поиска разделителей `***`, `---`, `___`, которые не находятся в таблицах

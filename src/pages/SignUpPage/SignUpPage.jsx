@@ -1,4 +1,5 @@
 import React from 'react'
+
 import SignUpForm from '../../components/Form/SignUpForm/SignUpForm'
 
 import styles from './SignUpPage.module.scss'

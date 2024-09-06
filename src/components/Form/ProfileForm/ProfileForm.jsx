@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearErrors, fetchUserUpdate, selectErrors, selectUser } from '../../../redux/slices/authFormSlice'
 import { useNavigate } from 'react-router-dom'
+
+import { clearErrors, fetchUserUpdate, selectErrors, selectUser } from '../../../redux/slices/authFormSlice'
 import { showSuccessToast } from '../../../utils/toastify'
 import { profileFormSchema } from '../../../validation/yupSchemas'
+
 import styles from './ProfileForm.module.scss'
 
 function ProfileForm() {

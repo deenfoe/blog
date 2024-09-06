@@ -1,7 +1,7 @@
 // src/hooks/useArticleFormatting.js
-import useWindowSize from './useWindowSize'
-
 import { truncateText, truncateTags } from '../utils/textFormatter'
+
+import useWindowSize from './useWindowSize'
 
 function useArticleFormatting(article, isFullArticle) {
   const { width } = useWindowSize()

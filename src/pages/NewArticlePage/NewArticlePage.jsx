@@ -1,4 +1,5 @@
 import ArticleForm from '../../components/Form/ArticleForm/ArticleForm'
+
 import styles from './NewArticlePage.module.scss'
 
 function NewArticlePage() {

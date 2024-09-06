@@ -1,5 +1,5 @@
 // src/utils/toastUtils.js
-import { toast, Slide } from 'react-toastify';
+import { toast, Slide } from 'react-toastify'
 
 export const showSuccessToast = (message) => {
   toast.success(message, {
@@ -12,8 +12,8 @@ export const showSuccessToast = (message) => {
     progress: undefined,
     theme: 'light',
     transition: Slide,
-  });
-};
+  })
+}
 
 export const showErrorToast = (message) => {
   toast.error(message, {
@@ -26,7 +26,7 @@ export const showErrorToast = (message) => {
     progress: undefined,
     theme: 'light',
     transition: Slide,
-  });
-};
+  })
+}
 
 // Добавьте другие типы уведомлений, если нужно

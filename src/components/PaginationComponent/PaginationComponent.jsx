@@ -15,7 +15,7 @@ const theme = {
   },
 }
 
-const PaginationComponent = ({ currentPage, pageSize, total, onChange }) => {
+function PaginationComponent({ currentPage, pageSize, total, onChange }) {
   return (
     <ConfigProvider theme={theme}>
       <Pagination

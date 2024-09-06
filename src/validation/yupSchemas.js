@@ -16,7 +16,7 @@ export const profileFormSchema = yup.object().shape({
     .matches(emailRegex, 'Неверный формат email (пример: test@mail.com)'),
   password: yup
     .string()
-    .transform((value) => (value ? value : undefined)) // Преобразует пустую строку в undefined
+    .transform((value) => value || undefined) // Преобразует пустую строку в undefined
     .notRequired()
     .min(6, 'Пароль должен быть минимум 6 символов')
     .max(40, 'Пароль должен быть максимум 40 символов')

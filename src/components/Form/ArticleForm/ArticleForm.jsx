@@ -1,18 +1,20 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import styles from './ArticleForm.module.scss'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { RollbackOutlined } from '@ant-design/icons'
+
 import {
   fetchCreateArticle,
   fetchUpdateArticle,
   resetSuccess,
   selectIsSuccess,
 } from '../../../redux/slices/articlesSlice'
-import { Link, useNavigate } from 'react-router-dom'
-import { RollbackOutlined } from '@ant-design/icons'
 import { showSuccessToast } from '../../../utils/toastify'
+
+import styles from './ArticleForm.module.scss'
 
 const schema = yup.object().shape({
   title: yup.string().required('Поле Title является обязательным.'),
@@ -98,16 +100,14 @@ function ArticleForm({ title, initialData = {}, isEdit = false }) {
     }
     try {
       if (isEdit) {
-        const slug = initialData.slug // slug должен быть передан в initialData
+        const { slug } = initialData // slug должен быть передан в initialData
         console.log('Editing article:', article)
         await dispatch(fetchUpdateArticle({ slug, articleData: article })).unwrap()
       } else {
         await dispatch(fetchCreateArticle(article)).unwrap()
       }
       showSuccessToast(isEdit ? '🦄 Статья успешно отредактирована' : '🦄 Статья успешно создана')
-      setTimeout(() => {
-        navigate('/') // Перенаправление после успешного выполнения действия
-      }, 1000)
+      navigate('/') // Перенаправление после успешного выполнения действия
     } catch (error) {
       console.error('Error submitting form:', error)
     }

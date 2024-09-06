@@ -46,7 +46,7 @@ export const fetchUserUpdate = createAsyncThunk(
   async (userData, { getState, rejectWithValue }) => {
     try {
       const state = getState() // Получаем текущее состояние Redux
-      const token = state.authForm.user.token // Извлекаем токен пользователя из состояния Redux
+      const { token } = state.authForm.user // Извлекаем токен пользователя из состояния Redux
 
       const response = await axios.put(
         'https://blog.kata.academy/api/user',
@@ -66,7 +66,6 @@ export const fetchUserUpdate = createAsyncThunk(
     }
   }
 )
-
 
 const authFormSlice = createSlice({
   name: 'authForm',
