@@ -6,33 +6,69 @@ import useWindowSize from './useWindowSize'
 function useArticleFormatting(article, isFullArticle) {
   const { width } = useWindowSize()
 
-  const titleMaxLength =
-    width < 450 ? 10 : width < 500 ? 16 : width < 550 ? 20 : width < 600 ? 26 : width < 650 ? 35 : width < 700 ? 40 : 50
-  const descriptionMaxLength =
-    width < 500
-      ? 23
-      : width < 550
-        ? 70
-        : width < 600
-          ? 78
-          : width < 650
-            ? 85
-            : width < 700
-              ? 94
-              : width < 750
-                ? 102
-                : width < 800
-                  ? 109
-                  : width < 850
-                    ? 115
-                    : width < 900
-                      ? 120
-                      : 140
-  const tagMaxLength = width < 500 ? 6 : width < 600 ? 8 : width < 900 ? 8 : 10
-  const maxTagsCount = width < 500 ? 2 : width < 600 ? 2 : width < 700 ? 2 : width < 800 ? 4 : width < 928 ? 4 : 5
+  let titleMaxLength
+  if (width < 450) {
+    titleMaxLength = 10
+  } else if (width < 500) {
+    titleMaxLength = 16
+  } else if (width < 550) {
+    titleMaxLength = 20
+  } else if (width < 600) {
+    titleMaxLength = 26
+  } else if (width < 650) {
+    titleMaxLength = 35
+  } else if (width < 700) {
+    titleMaxLength = 40
+  } else {
+    titleMaxLength = 50
+  }
+
+  let descriptionMaxLength
+  if (width < 500) {
+    descriptionMaxLength = 23
+  } else if (width < 550) {
+    descriptionMaxLength = 70
+  } else if (width < 600) {
+    descriptionMaxLength = 78
+  } else if (width < 650) {
+    descriptionMaxLength = 85
+  } else if (width < 700) {
+    descriptionMaxLength = 94
+  } else if (width < 750) {
+    descriptionMaxLength = 102
+  } else if (width < 800) {
+    descriptionMaxLength = 109
+  } else if (width < 850) {
+    descriptionMaxLength = 115
+  } else if (width < 900) {
+    descriptionMaxLength = 120
+  } else {
+    descriptionMaxLength = 140
+  }
+
+  let tagMaxLength
+  let maxTagsCount
+  if (width < 500) {
+    tagMaxLength = 6
+    maxTagsCount = 2
+  } else if (width < 600) {
+    tagMaxLength = 8
+    maxTagsCount = 2
+  } else if (width < 700) {
+    tagMaxLength = 8
+    maxTagsCount = 2
+  } else if (width < 800) {
+    tagMaxLength = 8
+    maxTagsCount = 4
+  } else if (width < 928) {
+    tagMaxLength = 8
+    maxTagsCount = 4
+  } else {
+    tagMaxLength = 10
+    maxTagsCount = 5
+  }
 
   if (isFullArticle) {
-    // Если это полная статья, возвращаем текст и теги без изменений
     return {
       truncatedTitle: article.title,
       truncatedDescription: article.description,

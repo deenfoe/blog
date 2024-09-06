@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Alert, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
+
 import {
   fetchArticles,
   selectArticles,
@@ -83,33 +84,67 @@ function ArticlesPage() {
   const handlePageChange = (page) => {
     dispatch(setCurrentPage(page))
   }
-  return (
-    <div className={styles.articlesPage}>
-      {showSpinner ? (
-        <div className={styles.loader}>
-          <Spin size="large" />
-        </div>
-      ) : errors ? (
-        <Alert message="Ошибка при загрузке данных" description={errors} type="error" showIcon />
-      ) : (
-        <>
-          <ul className={styles.articles}>
-            {articles.map((article) => (
-              <li key={article.slug}>
-                <Article article={article} variant="list" />
-              </li>
-            ))}
-          </ul>
-          <PaginationComponent
-            currentPage={currentPage}
-            pageSize={pageSize}
-            total={articlesCount}
-            onChange={handlePageChange}
-          />
-        </>
-      )}
-    </div>
-  )
+
+  let content
+
+  if (showSpinner) {
+    content = (
+      <div className={styles.loader}>
+        <Spin size="large" />
+      </div>
+    )
+  } else if (errors) {
+    content = <Alert message="Ошибка при загрузке данных" description={errors} type="error" showIcon />
+  } else {
+    content = (
+      <>
+        <ul className={styles.articles}>
+          {articles.map((article) => (
+            <li key={article.slug}>
+              <Article article={article} variant="list" />
+            </li>
+          ))}
+        </ul>
+        <PaginationComponent
+          currentPage={currentPage}
+          pageSize={pageSize}
+          total={articlesCount}
+          onChange={handlePageChange}
+        />
+      </>
+    )
+  }
+
+  return <div className={styles.articlesPage}>{content}</div>
 }
 
 export default ArticlesPage
+
+// return (
+//   <div className={styles.articlesPage}>
+//     {showSpinner ? (
+//       <div className={styles.loader}>
+//         <Spin size="large" />
+//       </div>
+//     ) : errors ? (
+//       <Alert message="Ошибка при загрузке данных" description={errors} type="error" showIcon />
+//     ) : (
+//       <>
+//         <ul className={styles.articles}>
+//           {articles.map((article) => (
+//             <li key={article.slug}>
+//               <Article article={article} variant="list" />
+//             </li>
+//           ))}
+//         </ul>
+//         <PaginationComponent
+//           currentPage={currentPage}
+//           pageSize={pageSize}
+//           total={articlesCount}
+//           onChange={handlePageChange}
+//         />
+//       </>
+//     )}
+//   </div>
+// )
+// }

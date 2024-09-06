@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+
 import MainLayout from '../Layouts/MainLayout'
 import ArticlePage from '../../pages/ArticlePage/ArticlePage'
 import ArticlesPage from '../../pages/ArticlesPage/ArticlesPage'
@@ -9,9 +10,8 @@ import NewArticlePage from '../../pages/NewArticlePage/NewArticlePage'
 import EditArticlePage from '../../pages/EditArticlePage/EditArticlePage'
 import PrivateRoute from '../PrivateRoute/PrivateRoute'
 import NotFoundPage from '../../pages/NotFoundPage/NotFoundPage'
+
 import styles from './App.module.scss'
-
-
 
 function App() {
   return (

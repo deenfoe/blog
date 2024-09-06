@@ -200,7 +200,7 @@ const articlesSlice = createSlice({
         state.isLoading = false
         state.errors = action.error.message || 'Failed to load articles'
       })
-      .addCase(fetchCreateArticle.fulfilled, (state, action) => {
+      .addCase(fetchCreateArticle.fulfilled, (state) => {
         state.isSuccess = true
       })
       .addCase(fetchUpdateArticle.fulfilled, (state, action) => {

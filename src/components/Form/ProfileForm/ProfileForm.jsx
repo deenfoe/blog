@@ -23,6 +23,7 @@ function ProfileForm() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: yupResolver(profileFormSchema),
     mode: 'onTouched', // Включает валидацию в реальном времени

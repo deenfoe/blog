@@ -4,8 +4,8 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 
-import { clearErrors, fetchSignIn, selectErrors, selectState, selectUser } from '../../../redux/slices/authFormSlice'
-import { showSuccessToast } from '../../../utils/toastify'
+import { clearErrors, fetchSignIn, selectErrors, selectUser } from '../../../redux/slices/authFormSlice'
+import { showErrorToast, showSuccessToast } from '../../../utils/toastify'
 import { signInFormSchema } from '../../../validation/yupSchemas'
 
 import styles from './SignInForm.module.scss'
@@ -31,7 +31,7 @@ function SignInForm() {
         localStorage.setItem('user', JSON.stringify(resultAction.payload))
       }
     } catch (error) {
-      console.error('Error during sign in:', error)
+      showErrorToast('Ошибка при входе. Пожалуйста, попробуйте снова.')
     }
   }
 

@@ -1,18 +1,13 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { RollbackOutlined } from '@ant-design/icons'
 
-import {
-  fetchCreateArticle,
-  fetchUpdateArticle,
-  resetSuccess,
-  selectIsSuccess,
-} from '../../../redux/slices/articlesSlice'
-import { showSuccessToast } from '../../../utils/toastify'
+import { fetchCreateArticle, fetchUpdateArticle } from '../../../redux/slices/articlesSlice'
+import { showErrorToast, showSuccessToast } from '../../../utils/toastify'
 
 import styles from './ArticleForm.module.scss'
 
@@ -100,8 +95,7 @@ function ArticleForm({ title, initialData = {}, isEdit = false }) {
     }
     try {
       if (isEdit) {
-        const { slug } = initialData // slug должен быть передан в initialData
-        console.log('Editing article:', article)
+        // const { slug } = initialData // slug должен быть передан в initialData
         await dispatch(fetchUpdateArticle({ slug, articleData: article })).unwrap()
       } else {
         await dispatch(fetchCreateArticle(article)).unwrap()
@@ -109,7 +103,7 @@ function ArticleForm({ title, initialData = {}, isEdit = false }) {
       showSuccessToast(isEdit ? '🦄 Статья успешно отредактирована' : '🦄 Статья успешно создана')
       navigate('/') // Перенаправление после успешного выполнения действия
     } catch (error) {
-      console.error('Error submitting form:', error)
+      showErrorToast(`Ошибка ${error} при отправке формы. Пожалуйста, попробуйте снова.`)
     }
   }
 

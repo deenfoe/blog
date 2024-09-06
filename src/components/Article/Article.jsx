@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Markdown from 'markdown-to-jsx'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,7 +11,6 @@ import {
   fetchFavoriteArticle,
   fetchUnFavoriteArticle,
   resetSuccess,
-  selectIsSuccess,
 } from '../../redux/slices/articlesSlice'
 import defaultImg from '../../assets/images/default-image.svg'
 import formatMarkdownSeparators from '../../utils/formatMarkdownSeparators'
@@ -87,7 +86,19 @@ function Article({ article, variant }) {
             >
               <div
                 className={styles.articleInfoFavorite}
+                role="button" // Добавляем роль "button"
+                tabIndex={0} // Делает элемент фокусируемым
                 onClick={article.favorited ? handleUnFavorite : handleFavorite}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault() // Чтобы пробел не прокручивал страницу
+                    if (article.favorited) {
+                      handleUnFavorite(event)
+                    } else {
+                      handleFavorite(event)
+                    }
+                  }
+                }}
               >
                 {article.favorited ? <HeartFilled style={{ color: 'red' }} /> : <HeartOutlined />}
                 <span>{article.favoritesCount}</span>
@@ -164,3 +175,22 @@ function Article({ article, variant }) {
 }
 
 export default Article
+
+// return ( // reutrn добавлен что бы убрать ошибку, но он не нужен.
+//   <Popover
+//     content={
+//       <span className={styles.articleInfoError}>
+//         <ExclamationCircleOutlined />
+//         Войдите, чтобы добавить эту статью в избранное.
+//       </span>
+//     }
+//     trigger="click"
+//     open={popoverOpen}
+//     onOpenChange={(open) => !open && setPopoverOpen(false)} // Скрывать Popover при клике вне его
+//   >
+//     <div className={styles.articleInfoFavorite} onClick={article.favorited ? handleUnFavorite : handleFavorite}>
+//       {article.favorited ? <HeartFilled style={{ color: 'red' }} /> : <HeartOutlined />}
+//       <span>{article.favoritesCount}</span>
+//     </div>
+//   </Popover>
+// )
