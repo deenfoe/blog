@@ -1,4 +1,4 @@
-https://aviasales-eight-phi.vercel.app/
+https://blog-chi-taupe-89.vercel.app/
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
