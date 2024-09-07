@@ -9,7 +9,7 @@ import styles from './MainLayout.module.scss'
 
 function MainLayout() {
   return (
-    <div>
+    <>
       <Header />
       <main className={styles.main}>
         <Outlet />
@@ -27,7 +27,7 @@ function MainLayout() {
         theme="light"
         transition={Slide}
       />
-    </div>
+    </>
   )
 }
 

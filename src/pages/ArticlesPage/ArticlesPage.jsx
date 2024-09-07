@@ -29,25 +29,6 @@ function ArticlesPage() {
   // Состояние для управления видимостью спиннера
   const [showSpinner, setShowSpinner] = useState(false)
 
-  // useEffect(() => {
-  //   dispatch(fetchArticles({ page: currentPage, pageSize }))
-  // }, [dispatch, currentPage, pageSize])
-
-  // // Добавляем обработчик на событие фокуса окна
-  // useEffect(() => {
-  //   const handleFocus = () => {
-  //     // Когда окно становится активным, обновляем статьи
-  //     dispatch(fetchArticles({ page: currentPage, pageSize }))
-  //   }
-
-  //   // Добавляем событие
-  //   window.addEventListener('focus', handleFocus)
-
-  //   // Убираем обработчик при размонтировании компонента
-  //   return () => {
-  //     window.removeEventListener('focus', handleFocus)
-  //   }
-  // }, [dispatch, currentPage, pageSize])
   useEffect(() => {
     dispatch(fetchArticles({ page: currentPage, pageSize }))
   }, [dispatch, currentPage, pageSize])

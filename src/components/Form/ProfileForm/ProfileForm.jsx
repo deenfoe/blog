@@ -12,8 +12,8 @@ import styles from './ProfileForm.module.scss'
 
 function ProfileForm() {
   const errorsFromServer = useSelector(selectErrors)
-  const [formSubmitted, setFormSubmitted] = useState(false)
-  const [updateError, setUpdateError] = useState(false)
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+  const [isUpdateError, setIsUpdateError] = useState(false)
   const user = useSelector(selectUser)
 
   const dispatch = useDispatch()
@@ -35,7 +35,7 @@ function ProfileForm() {
   })
 
   const submitForm = async (userData) => {
-    setUpdateError(false) // сбрасываем ошибку перед отправкой формы
+    setIsUpdateError(false) // сбрасываем ошибку перед отправкой формы
 
     if (!userData.password) {
       delete userData.password
@@ -45,22 +45,22 @@ function ProfileForm() {
       const resultAction = await dispatch(fetchUserUpdate(userData))
       if (fetchUserUpdate.fulfilled.match(resultAction)) {
         localStorage.setItem('user', JSON.stringify(resultAction.payload))
-        setFormSubmitted(true)
+        setIsFormSubmitted(true)
       } else {
-        setUpdateError(true) // Устанавливаем ошибку если запрос не был успешным
+        setIsUpdateError(true) // Устанавливаем ошибку если запрос не был успешным
       }
     } catch (error) {
-      setUpdateError(true) // Устанавливаем ошибку в случае исключения
+      setIsUpdateError(true) // Устанавливаем ошибку в случае исключения
     }
   }
 
   useEffect(() => {
-    if (formSubmitted && !updateError) {
+    if (isFormSubmitted && !isUpdateError) {
       showSuccessToast('🦄 Вы успешно обновили данные!')
       dispatch(clearErrors())
       navigate('/')
     }
-  }, [formSubmitted, updateError, navigate, dispatch])
+  }, [isFormSubmitted, isUpdateError, navigate, dispatch])
 
   const handleEmailInput = (e) => {
     const lowerCaseEmail = e.target.value.toLowerCase()

@@ -28,5 +28,3 @@ export const showErrorToast = (message) => {
     transition: Slide,
   })
 }
-
-// Добавьте другие типы уведомлений, если нужно
