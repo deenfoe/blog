@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { clearErrors, fetchUserUpdate, selectErrors, selectUser } from '../../../redux/slices/authFormSlice'
 import { showSuccessToast } from '../../../utils/toastify'
 import { profileFormSchema } from '../../../validation/yupSchemas'
+import InputField from '../../InputField/InputField'
 
 import styles from './ProfileForm.module.scss'
 
@@ -72,7 +73,7 @@ function ProfileForm() {
       <h2 className={styles.profileTitle}>Редактирование профиля</h2>
 
       <form className={styles.editProfileForm} onSubmit={handleSubmit(submitForm)}>
-        <label className={styles.profileLabel}>
+        {/* <label className={styles.profileLabel}>
           Имя пользователя
           <input
             className={`${styles.profileInput} ${errors.username ? styles.inputError : ''}`}
@@ -113,7 +114,41 @@ function ProfileForm() {
             {...register('image')}
           />
           <p className={styles.errorText}>{errors.image?.message}</p>
-        </label>
+        </label> */}
+
+        <InputField
+          label="Имя пользователя"
+          name="username"
+          placeholder="Имя пользователя"
+          register={register}
+          errorMessage={errors.username?.message}
+        />
+
+        <InputField
+          label="Email адрес"
+          name="email"
+          placeholder="Email адрес"
+          register={register}
+          onInput={handleEmailInput}
+          errorMessage={errors.email?.message}
+        />
+
+        <InputField
+          label="Пароль"
+          name="password"
+          type="password"
+          placeholder="Новый пароль"
+          register={register}
+          errorMessage={errors.password?.message}
+        />
+
+        <InputField
+          label="Изображение аватара (URL)"
+          name="image"
+          placeholder="ссылка"
+          register={register}
+          errorMessage={errors.image?.message}
+        />
 
         {errorsFromServer && (
           <>

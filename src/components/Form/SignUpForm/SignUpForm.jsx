@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchSignUp, selectErrors, selectUser } from '../../../redux/slices/authFormSlice'
 import { showSuccessToast } from '../../../utils/toastify'
 import { signUpFormSchema } from '../../../validation/yupSchemas'
+import InputField from '../../InputField/InputField'
 
 import styles from './SignUpForm.module.scss'
 
@@ -47,7 +48,7 @@ function SignUpForm() {
     <div>
       <h2 className={styles.signUpTitle}>Создать аккаунт</h2>
       <form className={styles.signUpForm} onSubmit={handleSubmit(submitForm)}>
-        <label className={styles.signUpLabel}>
+        {/* <label className={styles.signUpLabel}>
           Имя пользователя
           <input
             className={`${styles.signUpInput} ${errors.username ? styles.inputError : ''}`}
@@ -57,9 +58,9 @@ function SignUpForm() {
             {...register('username')}
           />
           <p className={styles.errorText}>{errors.username?.message}</p>
-        </label>
+        </label> */}
 
-        <label className={styles.signUpLabel}>
+        {/* <label className={styles.signUpLabel}>
           Email адрес
           <input
             className={`${styles.signUpInput} ${errors.email ? styles.inputError : ''}`}
@@ -70,9 +71,9 @@ function SignUpForm() {
             {...register('email')}
           />
           <p className={styles.errorText}>{errors.email?.message}</p>
-        </label>
+        </label> */}
 
-        <label className={styles.signUpLabel}>
+        {/* <label className={styles.signUpLabel}>
           Пароль
           <input
             className={`${styles.signUpInput} ${errors.password ? styles.inputError : ''}`}
@@ -94,7 +95,42 @@ function SignUpForm() {
             {...register('repeatPassword')}
           />
           <p className={styles.errorText}>{errors.repeatPassword?.message}</p>
-        </label>
+        </label> */}
+
+        <InputField
+          label="Имя пользователя"
+          name="username"
+          placeholder="Имя пользователя"
+          register={register}
+          errorMessage={errors.username?.message}
+        />
+
+        <InputField
+          label="Email адрес"
+          name="email"
+          placeholder="Email адрес"
+          register={register}
+          onInput={handleEmailInput}
+          errorMessage={errors.email?.message}
+        />
+
+        <InputField
+          label="Пароль"
+          name="password"
+          type="password"
+          placeholder="******"
+          register={register}
+          errorMessage={errors.password?.message}
+        />
+
+        <InputField
+          label="Повтор пароля"
+          name="repeatPassword"
+          type="password"
+          placeholder="******"
+          register={register}
+          errorMessage={errors.repeatPassword?.message}
+        />
 
         <div className={styles.signUpLine} />
 

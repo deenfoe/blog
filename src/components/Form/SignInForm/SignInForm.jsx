@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import { clearErrors, fetchSignIn, selectErrors, selectUser } from '../../../redux/slices/authFormSlice'
 import { showErrorToast, showSuccessToast } from '../../../utils/toastify'
 import { signInFormSchema } from '../../../validation/yupSchemas'
+import InputField from '../../InputField/InputField'
 
 import styles from './SignInForm.module.scss'
 
@@ -53,7 +54,7 @@ function SignInForm() {
     <div>
       <h2 className={styles.signInTitle}>Войти</h2>
       <form className={styles.signInForm} onSubmit={handleSubmit(submitForm)}>
-        <label className={styles.signInLabel}>
+        {/* <label className={styles.signInLabel}>
           Email адрес
           <input
             className={`${styles.signInInput} ${errors.email ? styles.inputError : ''}`}
@@ -63,9 +64,27 @@ function SignInForm() {
             {...register('email')}
           />
           <p className={styles.errorText}>{errors.email?.message}</p>
-        </label>
+        </label> */}
 
-        <label className={styles.signInLabel}>
+        <InputField
+          label="Email адрес"
+          name="email"
+          placeholder="Email адрес"
+          register={register}
+          onInput={handleEmailInput}
+          errorMessage={errors.email?.message}
+        />
+
+        <InputField
+          label="Пароль"
+          name="password"
+          type="password"
+          placeholder="******"
+          register={register}
+          errorMessage={errors.password?.message}
+        />
+
+        {/* <label className={styles.signInLabel}>
           Пароль
           <input
             className={`${styles.signInInput} ${errors.password ? styles.inputError : ''}`}
@@ -74,7 +93,7 @@ function SignInForm() {
             {...register('password')}
           />
           <p className={styles.errorText}>{errors.password?.message}</p>
-        </label>
+        </label> */}
 
         {errorsFromServer && (
           <p className={styles.errorText}> Email or password {errorsFromServer['email or password']}</p>
