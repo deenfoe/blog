@@ -98,7 +98,7 @@ const CommentTextarea = styled.textarea`
   border-radius: 5px;
   outline: none;
   width: 100%;
-  min-height: 100px;
+  min-height: 40px;
   resize: none;
   box-sizing: border-box;
   &:hover {
