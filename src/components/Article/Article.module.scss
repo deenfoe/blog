@@ -156,11 +156,14 @@
   align-items: center;
   align-self: flex-end;
   margin-bottom: 5px;
+  // width: 100%;
 }
 
 .deleteBtn,
 .editBtn {
   height: 31.1px;
+  max-width: 65.23px;
+  min-width: 65.23px;
   background-color: #ffff;
   padding: 6px 17px 5px 17px;
   border-radius: 5px;
@@ -184,6 +187,7 @@
 .deleteBtn {
   color: #f5222d;
   border-color: #f5222d;
+  max-width: 78px;
 
   &:hover {
     background-color: #f5222d; /* Изменение фона на красный при наведении */
@@ -194,6 +198,7 @@
 .editBtn {
   color: #52c41a;
   border-color: #52c41a;
+  max-width: 65.23px;
 
   &:hover {
     background-color: #52c41a; /* Изменение фона на зеленый при наведении */

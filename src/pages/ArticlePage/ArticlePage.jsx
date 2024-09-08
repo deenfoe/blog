@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchArticles, selectArticleBySlug } from '../../redux/slices/articlesSlice'
 import Article from '../../components/Article/Article'
+import ArticleComments from '../../components/ArticleComments/ArticleComments'
 
 import styles from './ArticlePage.module.scss'
 
@@ -19,7 +20,12 @@ function ArticlePage() {
     dispatch(fetchArticles({ slug }))
   }, [dispatch, slug])
 
-  return <div className={styles.articlePage}>{article && <Article article={article} variant="full" />}</div>
+  return (
+    <div className={styles.articlePage}>
+      {article && <Article article={article} variant="full" />}
+      <ArticleComments slug={slug} />
+    </div>
+  )
 }
 
 export default ArticlePage

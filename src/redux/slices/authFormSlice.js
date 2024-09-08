@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+import axiosInstance from '../../api/axiosInstance'
 
 const initialState = {
   user: JSON.parse(localStorage.getItem('user')) || null,
@@ -109,6 +110,7 @@ export const { logout, clearErrors } = authFormSlice.actions
 
 // export const selectState = (state) => state.authForm
 export const selectUser = (state) => state.authForm.user
+export const selectUsername = (state) => state.authForm?.user?.username
 export const selectErrors = (state) => state.authForm.errors
 export const selectIsAuthenticated = (state) => !!state.authForm.user
 

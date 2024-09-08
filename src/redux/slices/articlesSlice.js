@@ -6,6 +6,7 @@ import { truncateText, truncateTags } from '../../utils/textFormatter'
 const initialState = {
   articles: [],
   articleBySlug: {},
+  articleComments: {},
   articlesCount: 0,
   currentPage: 1,
   pageSize: 5,
@@ -169,6 +170,86 @@ export const fetchUnFavoriteArticle = createAsyncThunk(
   }
 )
 
+// Добавляем новый asyncThunk для получения комментариев статьи
+export const fetchArticleComments = createAsyncThunk(
+  'articles/fetchArticleComments',
+  async (slug, { getState, rejectWithValue }) => {
+    try {
+      const state = getState() // Получаем текущее состояние Redux
+      const token = state.authForm?.user?.token // Извлекаем токен пользователя, если он есть
+
+      // Конфигурируем заголовки, только если есть токен
+      const config = token
+        ? {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        : {}
+      const response = await axios.get(`https://blog.kata.academy/api/articles/${slug}/comments`, config)
+      return { slug, comments: response.data.comments } // Возвращаем slug статьи и комментарии
+    } catch (error) {
+      return rejectWithValue(error.response.data || 'Failed to fetch comments') // Обрабатываем ошибки
+    }
+  }
+)
+
+export const fetchCreateComment = createAsyncThunk(
+  'articles/fetchCreateComment',
+  async ({ slug, commentBody }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState()
+      const token = state.authForm?.user?.token
+
+      if (!token) {
+        return rejectWithValue('User is not authenticated')
+      }
+
+      const response = await axios.post(
+        `https://blog.kata.academy/api/articles/${slug}/comments`,
+        {
+          comment: {
+            body: commentBody,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      return { comment: response.data.comment, slug }
+    } catch (error) {
+      return rejectWithValue(error.response ? error.response.data : error.message)
+    }
+  }
+)
+
+export const fetchDeleteComment = createAsyncThunk(
+  'articles/fetchDeleteComment',
+  async ({ commentId, slug }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState()
+      const token = state.authForm?.user?.token
+
+      if (!token) {
+        return rejectWithValue('User is not authenticated')
+      }
+
+      await axios.delete(`https://blog.kata.academy/api/articles/${slug}/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      return { commentId, slug }
+    } catch (error) {
+      return rejectWithValue(error.response ? error.response.data : error.message)
+    }
+  }
+)
+
 const articlesSlice = createSlice({
   name: 'articles',
   initialState,
@@ -240,6 +321,38 @@ const articlesSlice = createSlice({
           state.articles[articleIndex] = updatedArticle
         }
       })
+      .addCase(fetchArticleComments.pending, (state) => {
+        state.isLoading = true // Отмечаем, что началась загрузка
+        state.errors = null // Очищаем ошибки
+      })
+      .addCase(fetchArticleComments.fulfilled, (state, action) => {
+        state.isLoading = false // Останавливаем индикатор загрузки
+        const { slug, comments } = action.payload // Извлекаем slug и комментарии
+        state.articleComments[slug] = comments // Сохраняем комментарии в state
+      })
+      .addCase(fetchArticleComments.rejected, (state, action) => {
+        state.isLoading = false // Останавливаем индикатор загрузки
+        state.errors = action.error.message || 'Failed to load comments' // Сохраняем сообщение об ошибке
+      })
+      .addCase(fetchCreateComment.fulfilled, (state, action) => {
+        const { comment, slug } = action.payload
+        state.articleComments[slug] = [...(state.articleComments[slug] || []), comment]
+        state.isSuccess = true
+      })
+      .addCase(fetchCreateComment.rejected, (state, action) => {
+        state.isSuccess = false
+        state.errors = action.payload || 'Failed to create comment'
+      })
+      .addCase(fetchDeleteComment.fulfilled, (state, action) => {
+        const { commentId, slug } = action.payload
+        // Удаляем комментарий из стейта
+        state.articleComments[slug] = state.articleComments[slug].filter((comment) => comment.id !== commentId)
+        state.isSuccess = true
+      })
+      .addCase(fetchDeleteComment.rejected, (state, action) => {
+        state.isSuccess = false
+        state.errors = action.payload || 'Failed to delete comment'
+      })
   },
 })
 
@@ -253,5 +366,6 @@ export const selectIsSuccess = (state) => state.articles.isSuccess
 export const selectIsLoading = (state) => state.articles.isLoading
 export const selectErrors = (state) => state.articles.errors
 export const selectArticleBySlug = (slug) => (state) => state.articles.articleBySlug[slug]
+export const selectCommentsBySlug = (slug) => (state) => state.articles.articleComments[slug]
 
 export default articlesSlice.reducer
