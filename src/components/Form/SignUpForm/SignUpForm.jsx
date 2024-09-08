@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchSignUp, selectErrors, selectUser } from '../../../redux/slices/authFormSlice'
-import { showSuccessToast } from '../../../utils/toastify'
+import { showErrorToast, showSuccessToast } from '../../../utils/toastify'
 import { signUpFormSchema } from '../../../validation/yupSchemas'
 import InputField from '../../InputField/InputField'
 
@@ -55,55 +55,6 @@ function SignUpForm() {
     <div>
       <h2 className={styles.signUpTitle}>Создать аккаунт</h2>
       <form className={styles.signUpForm} onSubmit={handleSubmit(submitForm)}>
-        {/* <label className={styles.signUpLabel}>
-          Имя пользователя
-          <input
-            className={`${styles.signUpInput} ${errors.username ? styles.inputError : ''}`}
-            name="username"
-            type="text"
-            placeholder="Имя пользователя"
-            {...register('username')}
-          />
-          <p className={styles.errorText}>{errors.username?.message}</p>
-        </label> */}
-
-        {/* <label className={styles.signUpLabel}>
-          Email адрес
-          <input
-            className={`${styles.signUpInput} ${errors.email ? styles.inputError : ''}`}
-            name="email"
-            type="text"
-            placeholder="Email адрес"
-            onInput={handleEmailInput}
-            {...register('email')}
-          />
-          <p className={styles.errorText}>{errors.email?.message}</p>
-        </label> */}
-
-        {/* <label className={styles.signUpLabel}>
-          Пароль
-          <input
-            className={`${styles.signUpInput} ${errors.password ? styles.inputError : ''}`}
-            name="password"
-            type="password"
-            placeholder="******"
-            {...register('password')}
-          />
-          <p className={styles.errorText}>{errors.password?.message}</p>
-        </label>
-
-        <label className={styles.signUpLabel}>
-          Повтор пароля
-          <input
-            className={`${styles.signUpInput} ${errors.repeatPassword ? styles.inputError : ''}`}
-            name="repeatPassword"
-            type="password"
-            placeholder="******"
-            {...register('repeatPassword')}
-          />
-          <p className={styles.errorText}>{errors.repeatPassword?.message}</p>
-        </label> */}
-
         <InputField
           label="Имя пользователя"
           name="username"
@@ -175,3 +126,52 @@ function SignUpForm() {
 }
 
 export default SignUpForm
+
+//  <label className={styles.signUpLabel}>
+//   Имя пользователя
+//   <input
+//     className={`${styles.signUpInput} ${errors.username ? styles.inputError : ''}`}
+//     name="username"
+//     type="text"
+//     placeholder="Имя пользователя"
+//     {...register('username')}
+//   />
+//   <p className={styles.errorText}>{errors.username?.message}</p>
+// </label>
+
+//  <label className={styles.signUpLabel}>
+//   Email адрес
+//   <input
+//     className={`${styles.signUpInput} ${errors.email ? styles.inputError : ''}`}
+//     name="email"
+//     type="text"
+//     placeholder="Email адрес"
+//     onInput={handleEmailInput}
+//     {...register('email')}
+//   />
+//   <p className={styles.errorText}>{errors.email?.message}</p>
+// </label>
+
+//  <label className={styles.signUpLabel}>
+//   Пароль
+//   <input
+//     className={`${styles.signUpInput} ${errors.password ? styles.inputError : ''}`}
+//     name="password"
+//     type="password"
+//     placeholder="******"
+//     {...register('password')}
+//   />
+//   <p className={styles.errorText}>{errors.password?.message}</p>
+// </label>
+
+// <label className={styles.signUpLabel}>
+//   Повтор пароля
+//   <input
+//     className={`${styles.signUpInput} ${errors.repeatPassword ? styles.inputError : ''}`}
+//     name="repeatPassword"
+//     type="password"
+//     placeholder="******"
+//     {...register('repeatPassword')}
+//   />
+//   <p className={styles.errorText}>{errors.repeatPassword?.message}</p>
+// </label>

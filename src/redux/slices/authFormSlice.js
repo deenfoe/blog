@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
+
+import axiosInstance from '../../api/axiosInstance'
 
 const initialState = {
   user: JSON.parse(localStorage.getItem('user')) || null,
@@ -10,7 +11,7 @@ export const fetchSignUp = createAsyncThunk(
   'authForm/fetchSignUp',
   async ({ username, email, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post('https://blog.kata.academy/api/users', {
+      const response = await axiosInstance.post('/users', {
         user: {
           username,
           email,
@@ -28,7 +29,7 @@ export const fetchSignIn = createAsyncThunk(
   'authForm/fetchSignIn',
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post('https://blog.kata.academy/api/users/login', {
+      const response = await axiosInstance.post('/users/login', {
         user: {
           email,
           password,
@@ -41,31 +42,18 @@ export const fetchSignIn = createAsyncThunk(
   }
 )
 
-export const fetchUserUpdate = createAsyncThunk(
-  'authForm/fetchUserUpdate',
-  async (userData, { getState, rejectWithValue }) => {
-    try {
-      const state = getState() // Получаем текущее состояние Redux
-      const { token } = state.authForm.user // Извлекаем токен пользователя из состояния Redux
+export const fetchUserUpdate = createAsyncThunk('authForm/fetchUserUpdate', async (userData, { rejectWithValue }) => {
+  try {
+    // Используем axiosInstance, который автоматически добавляет токен через интерсептор
+    const response = await axiosInstance.put('/user', {
+      user: userData,
+    })
 
-      const response = await axios.put(
-        'https://blog.kata.academy/api/user',
-        {
-          user: userData,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-
-      return response.data.user // Возвращаем данные пользователя при успешном запросе
-    } catch (error) {
-      return rejectWithValue(error.response.data)
-    }
+    return response.data.user // Возвращаем данные пользователя при успешном запросе
+  } catch (error) {
+    return rejectWithValue(error.response.data)
   }
-)
+})
 
 const authFormSlice = createSlice({
   name: 'authForm',
@@ -73,7 +61,6 @@ const authFormSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null
-      // localStorage.removeItem('user')
     },
     clearErrors: (state) => {
       state.errors = null
@@ -90,14 +77,12 @@ const authFormSlice = createSlice({
       })
       .addCase(fetchSignIn.fulfilled, (state, action) => {
         state.user = action.payload
-        // localStorage.setItem('user', JSON.stringify(action.payload))
       })
       .addCase(fetchSignIn.rejected, (state, action) => {
         state.errors = action.payload.errors
       })
       .addCase(fetchUserUpdate.fulfilled, (state, action) => {
         state.user = action.payload
-        // localStorage.setItem('user', JSON.stringify(action.payload))
       })
       .addCase(fetchUserUpdate.rejected, (state, action) => {
         state.errors = action.payload.errors
@@ -107,7 +92,6 @@ const authFormSlice = createSlice({
 
 export const { logout, clearErrors } = authFormSlice.actions
 
-// export const selectState = (state) => state.authForm
 export const selectUser = (state) => state.authForm.user
 export const selectUsername = (state) => state.authForm?.user?.username
 export const selectErrors = (state) => state.authForm.errors

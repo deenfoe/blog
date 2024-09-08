@@ -1,9 +1,9 @@
 import React from 'react'
 
-import SignInForm from '../../components/Form/SignInForm/SignInForm'
-SignInFormStyled
-import styles from './SignInPage.module.scss'
+// import SignInForm from '../../components/Form/SignInForm/SignInForm'
 import SignInFormStyled from '../../components/Form/SignInFormStyled/SignInFormStyled'
+
+import styles from './SignInPage.module.scss'
 
 function SignInPage() {
   return (

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
 
+import axiosInstance from '../../api/axiosInstance'
 import { truncateText, truncateTags } from '../../utils/textFormatter'
 
 const initialState = {
@@ -17,66 +17,33 @@ const initialState = {
 
 export const fetchArticles = createAsyncThunk(
   'articles/fetchArticles',
-  async ({ slug, page, pageSize }, { getState }) => {
-    const state = getState()
-    const token = state.authForm?.user?.token
-    const config = token
-      ? {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      : {}
-
-    // Проверяем, загружена ли статья по slug
-    if (slug) {
-      const existingArticle = state.articles.articleBySlug[slug]
-      if (existingArticle) {
-        // Если статья уже загружена, просто возвращаем её
-        return { singleArticle: existingArticle }
+  async ({ slug, page, pageSize }, { rejectWithValue }) => {
+    try {
+      if (slug) {
+        const response = await axiosInstance.get(`/articles/${slug}`)
+        return { singleArticle: response.data.article }
       }
-
-      // Если статья не загружена, делаем запрос
-      const response = await axios.get(`https://blog.kata.academy/api/articles/${slug}`, config)
-      return { singleArticle: response.data.article }
-    }
-    // Если slug нет, значит это запрос для списка статей
-    const response = await axios.get(
-      `https://blog.kata.academy/api/articles?limit=${pageSize}&offset=${(page - 1) * pageSize}`,
-      config
-    )
-
-    const truncatedArticles = (response.data.articles || []).map((article) => ({
-      ...article,
-      title: truncateText(article.title, 50),
-      description: truncateText(article.description, 150),
-      tagList: truncateTags(article.tagList || []),
-    }))
-
-    return {
-      articles: truncatedArticles,
-      articlesCount: response.data.articlesCount,
+      const response = await axiosInstance.get(`/articles?limit=${pageSize}&offset=${(page - 1) * pageSize}`)
+      const truncatedArticles = response.data.articles.map((article) => ({
+        ...article,
+        title: truncateText(article.title, 50),
+        description: truncateText(article.description, 150),
+        tagList: truncateTags(article.tagList || []),
+      }))
+      return { articles: truncatedArticles, articlesCount: response.data.articlesCount }
+    } catch (error) {
+      return rejectWithValue(error.response.data)
     }
   }
 )
 
 export const fetchCreateArticle = createAsyncThunk(
   'articles/fetchCreateArticle',
-  async (userData, { getState, rejectWithValue }) => {
+  async (articleData, { rejectWithValue }) => {
     try {
-      const state = getState() // Получаем текущее состояние Redux
-      const { token } = state.authForm.user // Извлекаем токен пользователя из
-      const response = await axios.post(
-        'https://blog.kata.academy/api/articles',
-        {
-          article: userData,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      const response = await axiosInstance.post('/articles', {
+        article: articleData,
+      })
       return response.data.article
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -86,19 +53,11 @@ export const fetchCreateArticle = createAsyncThunk(
 
 export const fetchUpdateArticle = createAsyncThunk(
   'articles/fetchUpdateArticle',
-  async ({ slug, articleData }, { getState, rejectWithValue }) => {
+  async ({ slug, articleData }, { rejectWithValue }) => {
     try {
-      const state = getState()
-      const { token } = state.authForm.user
-      const response = await axios.put(
-        `https://blog.kata.academy/api/articles/${slug}`,
-        { article: articleData },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      const response = await axiosInstance.put(`/articles/${slug}`, {
+        article: articleData,
+      })
       return response.data.article
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -106,119 +65,58 @@ export const fetchUpdateArticle = createAsyncThunk(
   }
 )
 
-export const fetchDeleteArticle = createAsyncThunk(
-  'articles/fetchDeleteArticle',
-  async (slug, { getState, rejectWithValue }) => {
+export const fetchDeleteArticle = createAsyncThunk('articles/fetchDeleteArticle', async (slug, { rejectWithValue }) => {
+  try {
+    await axiosInstance.delete(`/articles/${slug}`)
+    return slug
+  } catch (error) {
+    return rejectWithValue(error.response ? error.response.data : error.message)
+  }
+})
+
+export const fetchFavoriteArticle = createAsyncThunk(
+  'articles/fetchFavoriteArticle',
+  async (slug, { rejectWithValue }) => {
     try {
-      const state = getState()
-      const { token } = state.authForm.user
-      await axios.delete(`https://blog.kata.academy/api/articles/${slug}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      return slug
+      const response = await axiosInstance.post(`/articles/${slug}/favorite`)
+      return response.data.article
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : error.message)
     }
   }
 )
 
-export const fetchFavoriteArticle = createAsyncThunk(
-  'articles/fetchFavoriteArticle',
-  async (slug, { getState, rejectWithValue }) => {
-    try {
-      const state = getState()
-      const { token } = state.authForm.user
-      const response = await axios.post(
-        `https://blog.kata.academy/api/articles/${slug}/favorite`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-
-      return response.data.article
-    } catch (error) {
-      return rejectWithValue(error.response.data)
-    }
-  }
-)
-
 export const fetchUnFavoriteArticle = createAsyncThunk(
   'articles/fetchUnFavoriteArticle',
-  async (slug, { getState, rejectWithValue }) => {
+  async (slug, { rejectWithValue }) => {
     try {
-      const state = getState()
-      const { token } = state.authForm.user
-      const response = await axios.delete(
-        `https://blog.kata.academy/api/articles/${slug}/favorite`,
-
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-
+      const response = await axiosInstance.delete(`/articles/${slug}/favorite`)
       return response.data.article
     } catch (error) {
-      return rejectWithValue(error.response.data)
+      return rejectWithValue(error.response ? error.response.data : error.message)
     }
   }
 )
 
-// Добавляем новый asyncThunk для получения комментариев статьи
 export const fetchArticleComments = createAsyncThunk(
   'articles/fetchArticleComments',
-  async (slug, { getState, rejectWithValue }) => {
+  async (slug, { rejectWithValue }) => {
     try {
-      const state = getState() // Получаем текущее состояние Redux
-      const token = state.authForm?.user?.token // Извлекаем токен пользователя, если он есть
-
-      // Конфигурируем заголовки, только если есть токен
-      const config = token
-        ? {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        : {}
-      const response = await axios.get(`https://blog.kata.academy/api/articles/${slug}/comments`, config)
-      return { slug, comments: response.data.comments } // Возвращаем slug статьи и комментарии
+      const response = await axiosInstance.get(`/articles/${slug}/comments`)
+      return { slug, comments: response.data.comments }
     } catch (error) {
-      return rejectWithValue(error.response.data || 'Failed to fetch comments') // Обрабатываем ошибки
+      return rejectWithValue(error.response ? error.response.data : 'Failed to fetch comments')
     }
   }
 )
 
 export const fetchCreateComment = createAsyncThunk(
   'articles/fetchCreateComment',
-  async ({ slug, commentBody }, { getState, rejectWithValue }) => {
+  async ({ slug, commentBody }, { rejectWithValue }) => {
     try {
-      const state = getState()
-      const token = state.authForm?.user?.token
-
-      if (!token) {
-        return rejectWithValue('User is not authenticated')
-      }
-
-      const response = await axios.post(
-        `https://blog.kata.academy/api/articles/${slug}/comments`,
-        {
-          comment: {
-            body: commentBody,
-          },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-
+      const response = await axiosInstance.post(`/articles/${slug}/comments`, {
+        comment: { body: commentBody },
+      })
       return { comment: response.data.comment, slug }
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : error.message)
@@ -228,21 +126,9 @@ export const fetchCreateComment = createAsyncThunk(
 
 export const fetchDeleteComment = createAsyncThunk(
   'articles/fetchDeleteComment',
-  async ({ commentId, slug }, { getState, rejectWithValue }) => {
+  async ({ commentId, slug }, { rejectWithValue }) => {
     try {
-      const state = getState()
-      const token = state.authForm?.user?.token
-
-      if (!token) {
-        return rejectWithValue('User is not authenticated')
-      }
-
-      await axios.delete(`https://blog.kata.academy/api/articles/${slug}/comments/${commentId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
+      await axiosInstance.delete(`/articles/${slug}/comments/${commentId}`)
       return { commentId, slug }
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : error.message)
@@ -322,17 +208,17 @@ const articlesSlice = createSlice({
         }
       })
       .addCase(fetchArticleComments.pending, (state) => {
-        state.isLoading = true // Отмечаем, что началась загрузка
-        state.errors = null // Очищаем ошибки
+        state.isLoading = true
+        state.errors = null
       })
       .addCase(fetchArticleComments.fulfilled, (state, action) => {
-        state.isLoading = false // Останавливаем индикатор загрузки
-        const { slug, comments } = action.payload // Извлекаем slug и комментарии
-        state.articleComments[slug] = comments // Сохраняем комментарии в state
+        state.isLoading = false
+        const { slug, comments } = action.payload
+        state.articleComments[slug] = comments
       })
       .addCase(fetchArticleComments.rejected, (state, action) => {
-        state.isLoading = false // Останавливаем индикатор загрузки
-        state.errors = action.error.message || 'Failed to load comments' // Сохраняем сообщение об ошибке
+        state.isLoading = false
+        state.errors = action.error.message || 'Failed to load comments'
       })
       .addCase(fetchCreateComment.fulfilled, (state, action) => {
         const { comment, slug } = action.payload

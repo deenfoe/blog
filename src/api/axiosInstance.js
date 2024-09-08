@@ -1,8 +1,5 @@
 import axios from 'axios'
 
-import { getState } from '../redux/store'
-
-// axios с базовыми настройками
 const axiosInstance = axios.create({
   baseURL: 'https://blog.kata.academy/api',
   headers: {
