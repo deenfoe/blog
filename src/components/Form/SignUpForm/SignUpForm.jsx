@@ -27,9 +27,16 @@ function SignUpForm() {
     mode: 'onTouched', // Включает валидацию в реальном времени
   })
 
-  const submitForm = (data) => {
+  const submitForm = async (data) => {
     const { username, email, password } = data
-    dispatch(fetchSignUp({ username, email, password }))
+    try {
+      const resultAction = await dispatch(fetchSignUp({ username, email, password }))
+      if (fetchSignUp.fulfilled.match(resultAction)) {
+        localStorage.setItem('user', JSON.stringify(resultAction.payload))
+      }
+    } catch (error) {
+      showErrorToast('Ошибка при регистрации. Пожалуйста, попробуйте снова.')
+    }
   }
 
   useEffect(() => {

@@ -9,7 +9,6 @@ import { showErrorToast, showSuccessToast } from '../../../utils/toastify'
 import { signInFormSchema } from '../../../validation/yupSchemas'
 import InputField from '../../InputField/InputField'
 
-
 const StyledTitle = styled.h2`
   font-family: 'Roboto';
   font-weight: 700;

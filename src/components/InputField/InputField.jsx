@@ -31,8 +31,8 @@ const Input = styled.input`
     outline: none;
   }
 
-  ${({ hasError }) =>
-    hasError &&
+  ${({ $hasError }) =>
+    $hasError &&
     `
     border: 1px solid red;
   `}
@@ -59,7 +59,7 @@ function InputField({ label, type = 'text', name, placeholder, register, errorMe
           placeholder={placeholder}
           {...register(name)}
           onInput={onInput}
-          hasError={!!errorMessage}
+          $hasError={!!errorMessage}
           {...rest}
         />
       </Label>
