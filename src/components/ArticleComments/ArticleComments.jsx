@@ -45,6 +45,8 @@ const AuthorImage = styled.img`
   width: 30px;
   height: 30px;
   margin-right: 10px;
+  object-fit: cover;
+  object-position: center;
 `
 const ArticleCreated = styled.p`
   font-size: 12px;
