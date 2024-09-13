@@ -76,6 +76,15 @@ function ArticlesPage() {
     )
   } else if (errors) {
     content = <Alert message="Ошибка при загрузке данных" description={errors} type="error" showIcon />
+  } else if (articles.length === 0) {
+    content = (
+      <Alert
+        message="Нет доступного контента"
+        description="На данный момент статьи отсутствуют. Пожалуйста, попробуйте позже."
+        type="info"
+        showIcon
+      />
+    )
   } else {
     content = (
       <>
